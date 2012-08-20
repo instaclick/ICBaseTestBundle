@@ -95,7 +95,7 @@ protected static function getFixtureList()
 
 If you don't need any fixtures to be loaded before your test, but still want
 your empty Database schema to be loaded, you can tell the TestCase to still
-force the schema to be loaded by changing the configuration protperty flag:
+force the schema to be loaded by changing the configuration property flag:
 
 ```php
 protected $forceSchemaLoad = true;
