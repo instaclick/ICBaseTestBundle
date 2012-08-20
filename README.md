@@ -18,50 +18,58 @@ Installing this bundle can be done through these simple steps:
 
 1. Add this bundle to your project as a composer dependency:
 
-    // composer.json
-    {
+```javascript
+// composer.json
+{
+    // ...
+    require: {
         // ...
-        require: {
-            // ...
-            "instaclick/base-test-bundle": "dev-master"
-        }
+        "instaclick/base-test-bundle": "dev-master"
     }
+}
+```
 
 2. Add this bundle in your application kernel:
 
-    // application/ApplicationKernel.php
-    public function registerBundles()
-    {
-        // ...
-        if (in_array($this->getEnvironment(), array('test'))) {
-            $bundles[] = new IC\Bundle\Base\TestBundle\ICBaseTestBundle();
-        );
+```php
+// application/ApplicationKernel.php
+public function registerBundles()
+{
+    // ...
+    if (in_array($this->getEnvironment(), array('test'))) {
+        $bundles[] = new IC\Bundle\Base\TestBundle\ICBaseTestBundle();
+    );
 
-        return $bundles;
-    }
+    return $bundles;
+}
+```
 
 3. Double check if your session name is configured correctly:
 
-    # application/config/config_test.yml
-    framework:
-        test: ~
-        session:
-            name: "myapp"
+```
+# application/config/config_test.yml
+framework:
+    test: ~
+    session:
+        name: "myapp"
+```
 
 ## Creating your first functional test
 
 Just like a Symfony2 test, implementing a functional test is easy:
 
-    use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+```
+use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 
-    class MyFunctionalTest extends WebTestCase
+class MyFunctionalTest extends WebTestCase
+{
+    public function testSomething()
     {
-        public function testSomething()
-        {
-            // Normal test here. You can benefit from an already initialized
-            // Symfony2 Client by using directly $this->getClient()
-        }
+        // Normal test here. You can benefit from an already initialized
+        // Symfony2 Client by using directly $this->getClient()
     }
+}
+```
 
 ## Functional tests that requires Database to be initialized
 
@@ -73,21 +81,25 @@ load your database information before your test is actually executed.
 To enable your schema to be initialized and also load the initial Database
 information, just implements the protected static method `getFixtureList`:
 
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getFixtureList()
-    {
-        return array(
-            'Me\MyBundle\DataFixtures\ORM\LoadData'
-        );
-    }
+```php
+/**
+ * {@inheritdoc}
+ */
+protected static function getFixtureList()
+{
+    return array(
+        'Me\MyBundle\DataFixtures\ORM\LoadData'
+    );
+}
+```
 
 If you don't need any fixtures to be loaded before your test, but still want
 your empty Database schema to be loaded, you can tell the TestCase to still
 force the schema to be loaded by changing the configuration protperty flag:
 
-    protected $forceSchemaLoad = true;
+```php
+protected $forceSchemaLoad = true;
+```
 
 ## Overriding the default client instance
 
@@ -102,7 +114,9 @@ This bundle allows you to easily change the environment the Client gets
 initialized. To change the default environment (default: "test"), just redefine
 the constant `ENVIRONMENT`:
 
-    const ENVIRONMENT = "default";
+```php
+const ENVIRONMENT = "default";
+```
 
 ### Changing default Object Manager name
 
@@ -110,7 +124,9 @@ When using Databases, you may want to change the default ObjectManager your
 test should run against. Just like Client's environment, changing the default
 ObjectManager only requires to redefine the constant `MANAGER_NAME`:
 
-    const MANAGER_NAME = "stats";
+```php
+const MANAGER_NAME = "stats";
+```
 
 ### Server authentication
 
@@ -119,16 +135,18 @@ an ability to test secured pages. With simplicity in mind, Client can be
 initialized in an authenticated state for HTTP. THe only required step is
 implement the protected static method `getServerParameters`:
 
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getServerParameters()
-    {
-        return array(
-            'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW'   => 'jed1*passw0rd'
-        );
-    }
+```php
+/**
+ * {@inheritdoc}
+ */
+protected static function getServerParameters()
+{
+    return array(
+        'PHP_AUTH_USER' => 'admin',
+        'PHP_AUTH_PW'   => 'jed1*passw0rd'
+    );
+}
+```
 
 ### Changing Client initialization
 
@@ -137,16 +155,18 @@ refined support, you can still override the default Client initialization by
 overriding the protected static method `initializeClient` (sample is actually
 the default implementation of the method):
 
-    /**
-     * {@inheritdoc}
-     */
-    protected static function initializeClient()
-    {
-        return self::createClient(
-            array('environment' => static::ENVIRONMENT),
-            self::getServerParameters()
-        );
-    }
+```php
+/**
+ * {@inheritdoc}
+ */
+protected static function initializeClient()
+{
+    return self::createClient(
+        array('environment' => static::ENVIRONMENT),
+        self::getServerParameters()
+    );
+}
+```
 
 ## Useful hints
 
@@ -155,28 +175,32 @@ the default implementation of the method):
 Instead of using the native API of PHPUnit, WebTestCase provides a useful
 method right at your hands:
 
-    public function testFoo()
-    {
-        $myMock = $this->getClassMock('My\Foo');
+```php
+public function testFoo()
+{
+    $myMock = $this->getClassMock('My\Foo');
 
-        $myMock->expects($this->any())
-               ->method('bar')
-               ->will($this->returnValue(true));
+    $myMock->expects($this->any())
+           ->method('bar')
+           ->will($this->returnValue(true));
 
-        // ...
-    }
+    // ...
+}
+```
 
 ### Retrieving the Service Container
 
 Symfony Client holds an instance of Service Container. You can retrieve the
 container instance can be retrieved directly from the client:
 
-    public function testFooService()
-    {
-        $container = $this->getClient()->getContainer();
+```php
+public function testFooService()
+{
+    $container = $this->getClient()->getContainer();
 
-        // ...
-    }
+    // ...
+}
+```
 
 ### Retrieving Database references
 
@@ -185,12 +209,14 @@ actually testing consuming them. WebTestCase takes advantage of Doctrine Data
 Fixtures package, allowing you to retrieve references without requiring a
 database fetch.
 
-    pubic function testIndex()
-    {
-        $credential = $this->getReferenceRepository()->getReference('core.security.credential#admin');
+```php
+public function testIndex()
+{
+    $credential = $this->getReferenceRepository()->getReference('core.security.credential#admin');
 
-        // ...
-    }
+    // ...
+}
+```
 
 ## Database dependant functional tests
 
@@ -210,13 +236,15 @@ this bundle.
 
 To use SQLite as your test database, add this to your `app/config_test.yml`:
 
-    doctrine:
-        dbal:
-            default_connection: default
-            connections:
-                default:
-                    driver:   pdo_sqlite
-                    path:     %kernel.cache_dir%/test.db
+```
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   pdo_sqlite
+                path:     %kernel.cache_dir%/test.db
+```
 
 **Attention: you need to use Doctrine >= 2.2 to benefit from this feature.**
 
@@ -232,12 +260,14 @@ Any helper works taking advantage of Symfony2 Client instance available on
 WebTestCase. All helpers are registered in the latter, and it allows you to
 retrieve an instance easily by calling the method:
 
-    public function testFoo()
-    {
-        $commandHelper = $this->getHelper('command');
+```php
+public function testFoo()
+{
+    $commandHelper = $this->getHelper('command');
 
-        // ...
-    }
+    // ...
+}
+```
 
 ### Available helpers
 
@@ -258,31 +288,33 @@ you to configure your command, build the command input and retrieve the
 response content by using its available API.
 As an example, here is a full implementation of a command test:
 
-    /**
-     * @dataProvider provideDataForCommand
-     */
-    public function testCommand(array $arguments, $content)
-    {
-        $commandHelper = $this->getHelper('command');
+```php
+/**
+ * @dataProvider provideDataForCommand
+ */
+public function testCommand(array $arguments, $content)
+{
+    $commandHelper = $this->getHelper('command');
 
-        $commandHelper->setCommandName('ic:base:mail:flush-queue');
-        $commandHelper->setMaxMemory(5242880); // Optional (default value: 5 * 1024 * 1024 KB)
+    $commandHelper->setCommandName('ic:base:mail:flush-queue');
+    $commandHelper->setMaxMemory(5242880); // Optional (default value: 5 * 1024 * 1024 KB)
 
-        $input    = $commandHelper->getInput($arguments);
-        $response = $commandHelper->run($input);
+    $input    = $commandHelper->getInput($arguments);
+    $response = $commandHelper->run($input);
 
-        $this->assertContains($content, $response);
-    }
+    $this->assertContains($content, $response);
+}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function provideDataForCommand()
-    {
-        return array(
-            array(array('--server' => 'mail.instaclick.com'), 'Flushed queue successfully'),
-        );
-    }
+/**
+ * {@inheritdoc}
+ */
+public function provideDataForCommand()
+{
+    return array(
+        array(array('--server' => 'mail.instaclick.com'), 'Flushed queue successfully'),
+    );
+}
+```
 
 #### Controller Helper
 
@@ -295,25 +327,27 @@ check for returned content.
 of the plan to connect Symfony\Component\DomCrawler\Crawler as a separate
 method.
 
-    public function testViewAction()
-    {
-        $controllerHelper = $this->getHelper('controller');
-        $response         = $controllerHelper->render(
-            'ICBaseGeographicalBundle:Map:view',
-            array(
-                'attributes' => array(
-                    'coordinate' => new Coordinate(-34.45, 45.56),
-                    'width'      => 640,
-                    'height'     => 480
-                )
+```php
+public function testViewAction()
+{
+    $controllerHelper = $this->getHelper('controller');
+    $response         = $controllerHelper->render(
+        'ICBaseGeographicalBundle:Map:view',
+        array(
+            'attributes' => array(
+                'coordinate' => new Coordinate(-34.45, 45.56),
+                'width'      => 640,
+                'height'     => 480
             )
-        );
+        )
+    );
 
-        $this->assertContains('-34.45', $response);
-        $this->assertContains('45.56', $response);
-        $this->assertContains('640', $response);
-        $this->assertContains('480', $response);
-    }
+    $this->assertContains('-34.45', $response);
+    $this->assertContains('45.56', $response);
+    $this->assertContains('640', $response);
+    $this->assertContains('480', $response);
+}
+```
 
 #### Service Helper
 
@@ -322,14 +356,16 @@ Whenever you want to mock a Service and automatically inject back to Service
 Container, this helper is for you. Helper contains a method that does that:
 `mock`. It returns you an instance of MockBuilder.
 
-    public function testFoo()
-    {
-        $serviceHelper = $this->getHelper('service');
+```php
+public function testFoo()
+{
+    $serviceHelper = $this->getHelper('service');
 
-        $authenticationService = $serviceHelper->mock('core.security.authentication');
+    $authenticationService = $serviceHelper->mock('core.security.authentication');
 
-        // ...
-    }
+    // ...
+}
+```
 
 #### Session Helper
 
@@ -339,17 +375,19 @@ login for controller tests. Of course, Session helper also allows you to
 retrieve the actual Symfony Session to define/check/remove entries normally
 too.
 
-    pubic function testIndex()
-    {
-        $sessionHelper = $this->getHelper('session');
+```php
+pubic function testIndex()
+{
+    $sessionHelper = $this->getHelper('session');
 
-        $credential = $this->getReferenceRepository()->getReference('core.security.credential#admin');
+    $credential = $this->getReferenceRepository()->getReference('core.security.credential#admin');
 
-        // $sessionHelper->getSession() is also available
-        $sessionHelper->authenticate($credential, 'secured_area');
+    // $sessionHelper->getSession() is also available
+    $sessionHelper->authenticate($credential, 'secured_area');
 
-        // ...
-    }
+    // ...
+}
+```
 
 #### Validator Helper
 
@@ -358,37 +396,41 @@ Validator Helper encapsulates more logic than the other native helpers. It
 allows you to also test success and error states because it requires internal
 mocking of elements needed for testing.
 
-    public function testSuccessValidate($value)
-    {
-        $validatorHelper = $this->getHelper('validator');
-        $serviceHelper   = $this->getHelper('service');
+```php
+public function testSuccessValidate($value)
+{
+    $validatorHelper = $this->getHelper('validator');
+    $serviceHelper   = $this->getHelper('service');
 
-        $validatorHelper->setValidatorClass('IC\Bundle\Base\GeographicalBundle\Validator\Constraints\ValidLocationValidator');
-        $validatorHelper->setConstraintClass('IC\Bundle\Base\GeographicalBundle\Validator\Constraints\ValidLocation');
+    $validatorHelper->setValidatorClass('IC\Bundle\Base\GeographicalBundle\Validator\Constraints\ValidLocationValidator');
+    $validatorHelper->setConstraintClass('IC\Bundle\Base\GeographicalBundle\Validator\Constraints\ValidLocation');
 
-        // Required mocking
-        $geolocationService = $serviceHelper->mock('base.geographical.service.geolocation');
-        $geolocationService->expects($this->any())
-            ->method('convertLocationToCoordinate')
-            ->will($this->returnValue($this->mockCoordinate()));
+    // Required mocking
+    $geolocationService = $serviceHelper->mock('base.geographical.service.geolocation');
+    $geolocationService->expects($this->any())
+        ->method('convertLocationToCoordinate')
+        ->will($this->returnValue($this->mockCoordinate()));
 
-        $validatorHelper->getValidator()->setGeolocationService($geolocationService);
+    $validatorHelper->getValidator()->setGeolocationService($geolocationService);
 
-        // Testing
-        $validatorHelper->success($value);
-    }
+    // Testing
+    $validatorHelper->success($value);
+}
+```
 
 ### Creating and registering your own helper
 
 Registering a new helper is required to override the protected static method
 `initializeHelperList`:
 
-    protected static function initializeHelperList()
-    {
-        $helperList = parent::initializeHelperList();
+```php
+protected static function initializeHelperList()
+{
+    $helperList = parent::initializeHelperList();
 
-        $helperList->set('my', 'IC\Bundle\Site\DemoBundle\Test\Helper\MyHelper');
-        // Retrieve as: $myHelper = $this->getHelper('my');
+    $helperList->set('my', 'IC\Bundle\Site\DemoBundle\Test\Helper\MyHelper');
+    // Retrieve as: $myHelper = $this->getHelper('my');
 
-        return $helperList;
-    }
+    return $helperList;
+}
+```
