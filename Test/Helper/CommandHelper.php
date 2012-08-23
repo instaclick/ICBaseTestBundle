@@ -86,11 +86,11 @@ class CommandHelper extends AbstractHelper
     /**
      * Execute a console command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Input\InputInterface|null $input
      *
      * @return string
      */
-    public function run(InputInterface $input)
+    public function run(InputInterface $input = null)
     {
         $handler = fopen('php://temp/maxmemory:' . $this->maxMemory, 'r+');
         $output  = new StreamOutput($handler);
