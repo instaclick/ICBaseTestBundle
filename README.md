@@ -1,7 +1,7 @@
 # InstaClick Base Test Bundle
 
 *IMPORTANT NOTICE:* This bundle is still under development. Any changes will
-be done without prior notice to users that consume this package. Of course this
+be done without prior notice to consumers of this package. Of course this
 code will become stable at a certain point, but for now, use at your own risk.
 
 ## Introduction
@@ -10,7 +10,7 @@ This bundle provides lower level support for functional tests on Symfony2.
 Through the concept of helpers and loaders, this bundle supports individual
 support for test types, such as Command, Controller, Service, Validator, etc.
 
-This bundle requires at least that you are using Symfony 2.1.
+This bundle requires that you are using, at least, Symfony 2.1.
 
 ## Installation
 
@@ -79,7 +79,7 @@ comes with a native support for Doctrine Data Fixtures, which allows you to
 load your database information before your test is actually executed.
 
 To enable your schema to be initialized and also load the initial Database
-information, just implements the protected static method `getFixtureList`:
+information, just implement the protected static method `getFixtureList`:
 
 ```php
 /**
@@ -103,7 +103,7 @@ protected $forceSchemaLoad = true;
 
 ## Overriding the default client instance
 
-Some applications require more granular control what Symfony2 Client can do.
+Some applications require more granular control than what Symfony2 Client can do.
 This bundle allows you to change the default client initialization, just like
 you normally do with your Symfony2 WebTestCase, by overriding the static method
 `createClient`.
@@ -122,7 +122,7 @@ const ENVIRONMENT = "default";
 
 When using Databases, you may want to change the default ObjectManager your
 test should run against. Just like Client's environment, changing the default
-ObjectManager only requires to redefine the constant `MANAGER_NAME`:
+ObjectManager only requires you to redefine the constant `MANAGER_NAME`:
 
 ```php
 const MANAGER_NAME = "stats";
@@ -161,9 +161,9 @@ the default implementation of the method):
  */
 protected static function initializeClient()
 {
-    return self::createClient(
+    return static::createClient(
         array('environment' => static::ENVIRONMENT),
-        self::getServerParameters()
+        static::getServerParameters()
     );
 }
 ```
@@ -191,7 +191,7 @@ public function testFoo()
 ### Retrieving the Service Container
 
 Symfony Client holds an instance of Service Container. You can retrieve the
-container instance can be retrieved directly from the client:
+container instance directly from the client:
 
 ```php
 public function testFooService()
@@ -204,8 +204,8 @@ public function testFooService()
 
 ### Retrieving Database references
 
-Database dependant applications usually forces you to fetch for elements before
-actually testing consuming them. WebTestCase takes advantage of Doctrine Data
+Database dependant applications usually force you to fetch for elements before
+actually testing/consuming them. WebTestCase takes advantage of Doctrine Data
 Fixtures package, allowing you to retrieve references without requiring a
 database fetch.
 
@@ -220,19 +220,18 @@ public function testIndex()
 
 ## Database dependant functional tests
 
-Most cases, your application relies on a database to work. To help you on this
+In most cases, your application relies on a database to work. To help you on this
 task, and also speed up the execution of your suite, we strongly suggest that
 you use SQLite as your test database.
-The reason why do that is because this database works around a single file,
+The reason why to do that is because this database works around a single file,
 allowing you to easily create isolated scenarios. Also, this bundle has an
 ability to cache the generated schema and reuse it for every test.
-Another functionality this bundle also integrates natively is Doctrine Data
+Another piece of functionality: this bundle integrates natively with Doctrine Data
 Fixtures, allowing your SQLite test database to be cached with common - test
 agnostic - information even before your actual test gets executed.
 
-Finally, but not less important, if you use SQLite, your test is gonna run
-faster, even faster with all this native support it is built-in by the usage of
-this bundle.
+Finally, but no less important, if you use SQLite, your test will run
+faster with all the native support built-in, simply by using this bundle.
 
 To use SQLite as your test database, add this to your `app/config_test.yml`:
 
@@ -256,7 +255,7 @@ your own helper.
 
 ### Retrieving a helper
 
-Any helper works taking advantage of Symfony2 Client instance available on
+Access helpers by taking advantage of the Symfony2 Client instance available in
 WebTestCase. All helpers are registered in the latter, and it allows you to
 retrieve an instance easily by calling the method:
 
@@ -320,7 +319,7 @@ public function provideDataForCommand()
 
 This helper is available to you under the name `controller`.
 The motivation of this helper is to enable sub-requests to be executed without
-requiring the master request to be called. It allows to simulate a request and
+requiring the master request to be called. It allows you to simulate a request and
 check for returned content.
 
 **IMPORTANT NOTICE:** Controller Helper is still under development. It is part
@@ -352,9 +351,9 @@ public function testViewAction()
 #### Service Helper
 
 This helper is available to you under the name `service`.
-Whenever you want to mock a Service and automatically inject back to Service
+Whenever you want to mock a Service and automatically inject it back into Service
 Container, this helper is for you. Helper contains a method that does that:
-`mock`. It returns you an instance of MockBuilder.
+`mock`. It returns an instance of MockBuilder.
 
 ```php
 public function testFoo()
@@ -370,7 +369,7 @@ public function testFoo()
 #### Session Helper
 
 This helper is available to you under the name `session`.
-Session helper was written with a simple idea in mind: allows you to simulate
+Session helper was written with a simple idea in mind: allow you to simulate
 login for controller tests. Of course, Session helper also allows you to
 retrieve the actual Symfony Session to define/check/remove entries normally
 too.
