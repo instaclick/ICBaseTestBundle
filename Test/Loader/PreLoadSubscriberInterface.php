@@ -10,7 +10,7 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 /**
  * Interface used to subscribe to pre load fixture event
  *
- * @author John Cartwright <johnc@nationalfibre.net>
+ * @author John Cartwright <jcartdev@gmail.com>
  */
 interface PreLoadSubscriberInterface
 {

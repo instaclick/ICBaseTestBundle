@@ -22,8 +22,8 @@ use Symfony\Bundle\FrameworkBundle\Client;
  * Data Fixture Loader
  * Implementation innspired by LiipFunctionalTestBundle.
  *
- * @author Juti Noppornpitak <jutin@nationalfibre.net>
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Juti Noppornpitak <jnopporn@shiroyuki.com>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
 class FixtureLoader
@@ -200,6 +200,7 @@ class FixtureLoader
             copy($backupDatabase, $database);
 
             $this->executePostLoadSubscriberEvent($loader, $executor);
+
             return;
         }
 

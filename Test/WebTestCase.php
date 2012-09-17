@@ -13,8 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
  * Abstract class for Web test cases
  * Implementation inspired by LiipFunctionalTestBundle.
  *
- * @author Juti Noppornpitak <jutin@nationalfibre.net>
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Juti Noppornpitak <jnopporn@shiroyuki.com>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
 abstract class WebTestCase extends BaseWebTestCase

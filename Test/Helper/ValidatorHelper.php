@@ -13,7 +13,7 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 /**
  * Validator helper class.
  *
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 class ValidatorHelper extends AbstractHelper
 {

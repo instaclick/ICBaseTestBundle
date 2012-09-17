@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Service helper class.
  *
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 class ServiceHelper extends AbstractHelper
 {

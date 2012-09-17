@@ -16,7 +16,7 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 /**
  * Command helper class.
  *
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 class CommandHelper extends AbstractHelper
 {

@@ -12,7 +12,7 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 /**
  * Controller helper class.
  *
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 class ControllerHelper extends AbstractHelper
 {

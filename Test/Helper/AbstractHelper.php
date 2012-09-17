@@ -10,7 +10,7 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 /**
  * Abstract helper class.
  *
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 abstract class AbstractHelper
 {

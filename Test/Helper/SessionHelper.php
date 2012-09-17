@@ -16,7 +16,7 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
  * Session helper class.
  * Implementation inspired by LiipFunctionalTestBundle.
  *
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
 class SessionHelper extends AbstractHelper

@@ -18,8 +18,8 @@ use Doctrine\ORM\Tools\SchemaTool;
  * Schema Loader
  * Implementation innspired by LiipFunctionalTestBundle.
  *
- * @author Juti Noppornpitak <jutin@nationalfibre.net>
- * @author Guilherme Blanco <gblanco@nationalfibre.net>
+ * @author Juti Noppornpitak <jnopporn@shiroyuki.com>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
 class SchemaLoader
