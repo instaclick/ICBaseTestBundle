@@ -147,11 +147,12 @@ abstract class WebTestCase extends BaseWebTestCase
     protected static function initializeHelperList()
     {
         return new ArrayCollection(array(
-            'command'    => __NAMESPACE__ . '\Helper\CommandHelper',
-            'controller' => __NAMESPACE__ . '\Helper\ControllerHelper',
-            'service'    => __NAMESPACE__ . '\Helper\ServiceHelper',
-            'session'    => __NAMESPACE__ . '\Helper\SessionHelper',
-            'validator'  => __NAMESPACE__ . '\Helper\ValidatorHelper',
+            'command'     => __NAMESPACE__ . '\Helper\CommandHelper',
+            'controller'  => __NAMESPACE__ . '\Helper\ControllerHelper',
+            'service'     => __NAMESPACE__ . '\Helper\ServiceHelper',
+            'session'     => __NAMESPACE__ . '\Helper\SessionHelper',
+            'validator'   => __NAMESPACE__ . '\Helper\ValidatorHelper',
+            'persistence' => __NAMESPACE__ . '\Helper\PersistenceHelper',
         ));
     }
 
