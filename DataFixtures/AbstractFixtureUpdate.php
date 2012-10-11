@@ -5,25 +5,31 @@
 
 namespace IC\Bundle\Base\TestBundle\DataFixtures;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture as DoctrineAbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager,
+    Doctrine\Common\DataFixtures\AbstractFixture;
 
 /**
  * Abstract Fixture Update
  *
- * @author John Cartwright <johnc@nationalfibre.net>
+ * @author John Cartwright <jcartdev@gmail.com>
  */
-abstract class AbstractFixtureUpdate extends DoctrineAbstractFixture
+abstract class AbstractFixtureUpdate extends AbstractFixture
 {
     /**
-     * {@inheritdoc}
+     * Updates and persists the entities provided from the data list
+     *
+     * @param Doctrine\Common\Persistence\ObjectManager $manager
+     * 
+     * @throws \InvalidArgumentException If invalid reference key to update was provided
      */
     public function load(ObjectManager $manager)
     {
         foreach ($this->getDataList() as $referenceKey => $data) {
+            if ( ! $this->hasReference($referenceKey)) {
+                throw new \InvalidArgumentException('Reference ['. $referenceKey .'] does not exist');
+            }
 
             $entity = $this->updateEntity($data, $this->getReference($referenceKey));
-
             if ( ! $entity) {
                 continue;
             }
