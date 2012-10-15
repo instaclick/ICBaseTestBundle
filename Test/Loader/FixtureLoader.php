@@ -125,7 +125,6 @@ class FixtureLoader
                 break;
 
             default:
-
                 // Prepare schema
                 $schemaHelper = new SchemaLoader($executor->getObjectManager());
                 $schemaHelper->load($this->purgeMode);
@@ -168,9 +167,6 @@ class FixtureLoader
      */
     private function executePostLoadSubscriberEvent($fixtureList, ORMExecutor $executor)
     {
-        \Doctrine\Common\Util\Debug::dump($fixtureList);
-
-
         foreach ($fixtureList as $fixture) {
             if ( ! $fixture instanceof PostLoadSubscriberInterface) {
                 continue;
