@@ -25,6 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Client;
  * @author Juti Noppornpitak <jnopporn@shiroyuki.com>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
+ * @author John Cartwright <jcartdev@gmail.com>
  */
 class FixtureLoader
 {
@@ -124,18 +125,20 @@ class FixtureLoader
                 break;
 
             default:
+
                 // Prepare schema
                 $schemaHelper = new SchemaLoader($executor->getObjectManager());
                 $schemaHelper->load($this->purgeMode);
 
                 // Load fixtures
-                $loader = $this->getLoader($classList);
+                $loader      = $this->getLoader($classList);
+                $fixtureList = $loader->getFixtures();
 
-                $this->executePreLoadSubscriberEvent($loader, $executor);
+                $this->executePreLoadSubscriberEvent($fixtureList, $executor);
 
-                $executor->execute($loader->getFixtures(), true);
+                $executor->execute($fixtureList, true);
 
-                $this->executePostLoadSubscriberEvent($loader, $executor);
+                $this->executePostLoadSubscriberEvent($fixtureList, $executor);
                 break;
         }
     }
@@ -143,12 +146,12 @@ class FixtureLoader
     /**
      * Executes preload fixture event
      *
-     * @param \Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader $loader
+     * @param array $fixtureList List of fixture objects
      * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor
      */
-    private function executePreLoadSubscriberEvent(SymfonyFixtureLoader $loader, ORMExecutor $executor)
+    private function executePreLoadSubscriberEvent($fixtureList, ORMExecutor $executor)
     {
-        foreach ($loader->getFixtures() as $fixture) {
+        foreach ($fixtureList as $fixture) {
             if ( ! $fixture instanceof PreLoadSubscriberInterface) {
                 continue;
             }
@@ -160,12 +163,15 @@ class FixtureLoader
     /**
      * Executes postload fixture event
      *
-     * @param \Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader $loader
+     * @param array $fixtureList List of fixture objects
      * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor
      */
-    private function executePostLoadSubscriberEvent(SymfonyFixtureLoader $loader, ORMExecutor $executor)
+    private function executePostLoadSubscriberEvent($fixtureList, ORMExecutor $executor)
     {
-        foreach ($loader->getFixtures() as $fixture) {
+        \Doctrine\Common\Util\Debug::dump($fixtureList);
+
+
+        foreach ($fixtureList as $fixture) {
             if ( ! $fixture instanceof PostLoadSubscriberInterface) {
                 continue;
             }
@@ -186,20 +192,21 @@ class FixtureLoader
         $entityManager  = $executor->getObjectManager();
         $connection     = $entityManager->getConnection();
         $loader         = $this->getLoader($classList);
+        $fixtureList    = $loader->getFixtures();
 
         $parameters     = $connection->getParams();
         $cacheDirectory = $container->getParameter('kernel.cache_dir');
         $database       = isset($parameters['path']) ? $parameters['path'] : $parameters['dbname'];
         $backupDatabase = sprintf('%s/test_populated_%s.db', $cacheDirectory, md5(serialize($classList)));
 
-        $this->executePreLoadSubscriberEvent($loader, $executor);
+        $this->executePreLoadSubscriberEvent($fixtureList, $executor);
 
         if (file_exists($backupDatabase)) {
             $executor->getReferenceRepository()->load($backupDatabase);
 
             copy($backupDatabase, $database);
 
-            $this->executePostLoadSubscriberEvent($loader, $executor);
+            $this->executePostLoadSubscriberEvent($fixtureList, $executor);
 
             return;
         }
@@ -211,13 +218,13 @@ class FixtureLoader
 
         // Load fixtures
         if ( ! empty($classList)) {
-            $executor->execute($loader->getFixtures(), true);
+            $executor->execute($fixtureList, true);
             $executor->getReferenceRepository()->save($backupDatabase);
 
             copy($database, $backupDatabase);
         }
 
-        $this->executePostLoadSubscriberEvent($loader, $executor);
+        $this->executePostLoadSubscriberEvent($fixtureList, $executor);
     }
 
     /**
@@ -264,5 +271,3 @@ class FixtureLoader
         }
     }
 }
-
-
