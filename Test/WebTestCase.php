@@ -57,11 +57,19 @@ abstract class WebTestCase extends BaseWebTestCase
         // Only initialize schema and fixtures if any are defined
         $fixtureList = static::getFixtureList();
 
-        if ( ! empty($fixtureList) || $this->forceSchemaLoad) {
-            $fixtureLoader = new Loader\FixtureLoader($this->client);
-            $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
+        if (empty($fixtureList) && ! $this->forceSchemaLoad) {
+            return;
+        }
 
-            $this->referenceRepository = $executor->getReferenceRepository();
+        $fixtureLoader = new Loader\FixtureLoader($this->client);
+        $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
+
+        $this->referenceRepository = $executor->getReferenceRepository();
+
+        $cacheDriver = $this->referenceRepository->getManager()->getMetadataFactory()->getCacheDriver();
+
+        if ($cacheDriver) {
+            $cacheDriver->deleteAll();
         }
     }
 
