@@ -43,7 +43,7 @@ Installing this bundle can be done through these simple steps:
 ```
 
 3. Double check if your session name is configured correctly:
-```
+```yaml
 # application/config/config_test.yml
     framework:
         test: ~
@@ -55,7 +55,7 @@ Installing this bundle can be done through these simple steps:
 
 Just like a Symfony2 test, implementing a functional test is easy:
 
-```
+```php
 use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 
 class MyFunctionalTest extends WebTestCase
@@ -232,7 +232,7 @@ faster with all the native support built-in, simply by using this bundle.
 
 To use SQLite as your test database, add this to your `app/config_test.yml`:
 
-```
+```yaml
 doctrine:
     dbal:
         default_connection: default
