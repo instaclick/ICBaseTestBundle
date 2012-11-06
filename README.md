@@ -38,7 +38,7 @@ public function registerBundles()
     // ...
     if (in_array($this->getEnvironment(), array('test'))) {
         $bundles[] = new IC\Bundle\Base\TestBundle\ICBaseTestBundle();
-    );
+    }
 
     return $bundles;
 }
