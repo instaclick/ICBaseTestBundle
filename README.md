@@ -129,7 +129,7 @@ const MANAGER_NAME = "stats";
 
 Whenever your application uses HTTP authentication, your test should still have
 an ability to test secured pages. With simplicity in mind, Client can be
-initialized in an authenticated state for HTTP. THe only required step is
+initialized in an authenticated state for HTTP. The only required step is
 implement the protected static method `getServerParameters`:
 
 ```php
