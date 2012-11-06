@@ -17,48 +17,45 @@ This bundle requires that you are using, at least, Symfony 2.1.
 Installing this bundle can be done through these simple steps:
 
 1. Add this bundle to your project as a composer dependency:
-
 ```javascript
-// composer.json
-{
-    // ...
-    require: {
+    // composer.json
+    {
         // ...
-        "instaclick/base-test-bundle": "dev-master"
+        require: {
+            // ...
+            "instaclick/base-test-bundle": "dev-master"
+        }
     }
-}
 ```
 
 2. Add this bundle in your application kernel:
-
 ```php
-// application/ApplicationKernel.php
-public function registerBundles()
-{
-    // ...
-    if (in_array($this->getEnvironment(), array('test'))) {
-        $bundles[] = new IC\Bundle\Base\TestBundle\ICBaseTestBundle();
-    );
+    // application/ApplicationKernel.php
+    public function registerBundles()
+    {
+        // ...
+        if (in_array($this->getEnvironment(), array('test'))) {
+            $bundles[] = new IC\Bundle\Base\TestBundle\ICBaseTestBundle();
+        }
 
-    return $bundles;
-}
+        return $bundles;
+    }
 ```
 
 3. Double check if your session name is configured correctly:
-
-```
+```yaml
 # application/config/config_test.yml
-framework:
-    test: ~
-    session:
-        name: "myapp"
+    framework:
+        test: ~
+        session:
+            name: "myapp"
 ```
 
 ## Creating your first functional test
 
 Just like a Symfony2 test, implementing a functional test is easy:
 
-```
+```php
 use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 
 class MyFunctionalTest extends WebTestCase
@@ -132,7 +129,7 @@ const MANAGER_NAME = "stats";
 
 Whenever your application uses HTTP authentication, your test should still have
 an ability to test secured pages. With simplicity in mind, Client can be
-initialized in an authenticated state for HTTP. THe only required step is
+initialized in an authenticated state for HTTP. The only required step is
 implement the protected static method `getServerParameters`:
 
 ```php
@@ -235,7 +232,7 @@ faster with all the native support built-in, simply by using this bundle.
 
 To use SQLite as your test database, add this to your `app/config_test.yml`:
 
-```
+```yaml
 doctrine:
     dbal:
         default_connection: default
