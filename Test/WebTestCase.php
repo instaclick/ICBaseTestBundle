@@ -46,7 +46,7 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
