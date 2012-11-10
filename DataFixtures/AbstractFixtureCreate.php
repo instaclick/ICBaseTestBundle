@@ -34,6 +34,10 @@ abstract class AbstractFixtureCreate extends AbstractFixture
 
             $manager->persist($entity);
 
+            if (is_int($referenceKey)) {
+                continue;
+            }
+
             $this->setReference($referenceKey, $entity);
         }
 
