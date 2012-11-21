@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
  * @author Juti Noppornpitak <jnopporn@shiroyuki.com>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
+ * @author Danilo Cabello <danilo.cabello@gmail.com>
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -132,6 +133,18 @@ abstract class WebTestCase extends BaseWebTestCase
         $helperClass = $this->helperList->get($name);
 
         return new $helperClass($this);
+    }
+
+    /**
+     * Overwrite assertNull to avoid segmentation fault 
+     * when comparing to Objects.
+     *
+     * @param mixed  $actual
+     * @param string $message
+     */
+    public function assertNull($actual, $message = null)
+    {
+        return $this->assertTrue(is_null($actual), $message);
     }
 
     /**
