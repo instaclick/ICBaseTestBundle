@@ -84,10 +84,12 @@ abstract class WebTestCase extends BaseWebTestCase
         $reflection = new \ReflectionObject($this);
 
         foreach ($reflection->getProperties() as $property) {
-            if ( ! $property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit_')) {
-                $property->setAccessible(true);
-                $property->setValue($this, null);
+            if ($property->isStatic() || 0 === strpos($property->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                continue;
             }
+            
+            $property->setAccessible(true);
+            $property->setValue($this, null);
         }
     }
 
