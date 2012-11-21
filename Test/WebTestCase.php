@@ -81,18 +81,14 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         parent::tearDown();
 
-        $refl = new \ReflectionObject($this);
+        $reflection = new \ReflectionObject($this);
 
-        foreach ($refl->getProperties() as $prop) {
-            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
-                $prop->setAccessible(true);
-                $prop->setValue($this, null);
+        foreach ($reflection->getProperties() as $property) {
+            if ( ! $property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
             }
         }
-
-        $this->client              = null;
-        $this->helperList          = null;
-        $this->referenceRepository = null;
     }
 
     /**
