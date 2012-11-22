@@ -91,6 +91,11 @@ abstract class WebTestCase extends BaseWebTestCase
             $property->setAccessible(true);
             $property->setValue($this, null);
         }
+
+        // workaround for https://bugs.php.net/bug.php?id=63582
+        unset($this->client);
+        unset($this->helperList);
+        unset($this->referenceRepository);
     }
 
     /**
