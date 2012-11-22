@@ -149,7 +149,7 @@ abstract class WebTestCase extends BaseWebTestCase
      * @param mixed  $actual
      * @param string $message
      */
-    public function assertNull($actual, $message = null)
+    public static function assertNull($actual, $message = null)
     {
         return $this->assertTrue(is_null($actual), $message);
     }
