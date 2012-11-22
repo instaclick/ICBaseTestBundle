@@ -139,12 +139,12 @@ abstract class WebTestCase extends BaseWebTestCase
      * Overwrite assertNull to avoid segmentation fault 
      * when comparing to Objects.
      *
-     * @param mixed  $actual
-     * @param string $message
+     * @param  mixed  $actual
+     * @param  string $message
      */
-    public function assertNull($actual, $message = null)
+    public static function assertNull($actual, $message = '')
     {
-        return $this->assertTrue(is_null($actual), $message);
+        self::assertTrue(is_null($actual), $message);
     }
 
     /**
