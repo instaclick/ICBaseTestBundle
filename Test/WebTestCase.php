@@ -75,27 +75,35 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * {@inheritdoc}
+     * Unset properties belonging to a class
+     *
+     * @param mixed $object
      */
-    public function tearDown()
+    private function unsetPropertyList($object)
     {
-        parent::tearDown();
-
-        $reflection = new \ReflectionObject($this);
-
-        foreach ($reflection->getProperties() as $property) {
-            if ($property->isStatic() || 0 === strpos($property->getDeclaringClass()->getName(), 'PHPUnit_')) {
+        foreach ($object->getProperties() as $property) {
+            if ($property->isStatic() || 0 === strncmp($property->getDeclaringClass()->getName(), 'PHPUnit_', 8)) {
                 continue;
             }
             
             $property->setAccessible(true);
             $property->setValue($this, null);
         }
+    }
 
-        // workaround for https://bugs.php.net/bug.php?id=63582
-        unset($this->client);
-        unset($this->helperList);
-        unset($this->referenceRepository);
+    /**
+     * {@inheritdoc}
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        for ($reflection = new \ReflectionObject($this);
+            $reflection !== false;
+            $reflection = $reflection->getParentClass()
+        ) {
+            $this->unsetPropertyList($reflection);
+        }
     }
 
     /**
