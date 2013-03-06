@@ -57,9 +57,10 @@ class ControllerHelper extends AbstractHelper
         $client     = $this->testCase->getClient();
         $container  = $client->getContainer();
         $httpKernel = $container->get('http_kernel');
+        $attributes = isset($options['attributes']) ? $options['attributes'] : array();
 
         $container->set('request', $this->request);
 
-        return $httpKernel->render($controller, $options);
+        return $httpKernel->forward($controller, $attributes);
     }
 }
