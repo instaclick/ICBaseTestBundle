@@ -60,6 +60,6 @@ class ControllerHelper extends AbstractHelper
 
         $container->set('request', $this->request);
 
-        return $httpKernel->render($controller, $options);
+        return $httpKernel->forward($controller);
     }
 }
