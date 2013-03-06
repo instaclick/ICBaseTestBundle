@@ -50,7 +50,7 @@ class ControllerHelper extends AbstractHelper
      * @param string $controller The controller to execute the request
      * @param array  $options    Request Options
      *
-     * @return \Symfony\Component\DomCrawler\Crawler
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render($controller, array $options = array())
     {
@@ -60,6 +60,6 @@ class ControllerHelper extends AbstractHelper
 
         $container->set('request', $this->request);
 
-        return $httpKernel->forward($controller);
+        return $httpKernel->render($controller, $options);
     }
 }
