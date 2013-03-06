@@ -142,6 +142,10 @@ class ValidatorHelper extends AbstractHelper
              ->expects($this->testCase->never())
              ->method('addViolationAtSubPath');
 
+        $this->context
+             ->expects($this->testCase->never())
+             ->method('addViolationAt');
+
         $validator->validate($value, $constraint);
     }
 
@@ -199,9 +203,13 @@ class ValidatorHelper extends AbstractHelper
         $validator  = $this->getValidator();
         $constraint = $this->getConstraint();
 
+        $methodName = method_exists('Symfony\Component\Validator\ExecutionContext', 'addViolationAt')
+            ? 'addViolationAt'
+            : 'addViolationAtSubPath';
+
         $this->context
              ->expects($this->testCase->once())
-             ->method('addViolationAtSubPath')
+             ->method($methodName)
              ->with($type, $message, $parameters);
 
         $validator->validate($value, $constraint);
