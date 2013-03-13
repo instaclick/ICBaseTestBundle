@@ -34,6 +34,11 @@ class SessionHelper extends AbstractHelper
     private $container;
 
     /**
+     * \Symfony\Bundle\FrameworkBundle\Client
+     */
+    private $client;
+
+    /**
      * {@inheritdoc}
      *
      * @throws \InvalidArgumentException
@@ -42,10 +47,8 @@ class SessionHelper extends AbstractHelper
     {
         parent::__construct($testCase);
 
-        $client     = $this->testCase->getClient();
-        $cookieJar  = $client->getCookieJar();
-
-        $this->container = $client->getContainer();
+        $this->client    = $this->testCase->getClient();
+        $this->container = $this->client->getContainer();
         $this->session   = $this->container->get('session');
 
         // Required parameter to be defined, preventing "hasPreviousSession" in Request to return false.
@@ -58,7 +61,7 @@ class SessionHelper extends AbstractHelper
         $this->session->setId(uniqid());
 
         // Assign session cookie information referring to session id, allowing consecutive requests session recovering
-        $cookieJar->set(new Cookie($options['name'], $this->session->getId()));
+        $this->client->getCookieJar()->set(new Cookie($options['name'], $this->session->getId()));
     }
 
     /**
@@ -94,7 +97,7 @@ class SessionHelper extends AbstractHelper
      */
     private function dispatchInteractiveLoginEvent(UsernamePasswordToken $token)
     {
-        $request    = new Request();
+        $request    = $this->client->getRequest() ?: new Request();
         $loginEvent = new InteractiveLoginEvent($request, $token);
 
         $this->container->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
