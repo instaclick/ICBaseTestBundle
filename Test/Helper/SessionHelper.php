@@ -6,10 +6,11 @@
 namespace IC\Bundle\Base\TestBundle\Test\Helper;
 
 use Symfony\Component\BrowserKit\Cookie;
-
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-
 use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 
 /**
@@ -18,6 +19,7 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
  *
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
+ * @author John Cartwright <jcartdev@gmail.com>
  */
 class SessionHelper extends AbstractHelper
 {
@@ -25,6 +27,11 @@ class SessionHelper extends AbstractHelper
      * @var \Symfony\Component\HttpFoundation\Session\Session
      */
     private $session;
+
+    /**
+     * \Symfony\Component\DependencyInjection\Container
+     */
+    private $container;
 
     /**
      * {@inheritdoc}
@@ -35,19 +42,18 @@ class SessionHelper extends AbstractHelper
     {
         parent::__construct($testCase);
 
-        $client    = $this->testCase->getClient();
+        $client     = $this->testCase->getClient();
         $cookieJar = $client->getCookieJar();
-        $container = $client->getContainer();
+
+        $this->container = $client->getContainer();
+        $this->session   = $this->container->get('session');
 
         // Required parameter to be defined, preventing "hasPreviousSession" in Request to return false.
-        $options = $container->getParameter('session.storage.options');
+        $options = $this->container->getParameter('session.storage.options');
 
         if ( ! $options || ! isset($options['name'])) {
             throw new \InvalidArgumentException('Missing session.storage.options#name');
         }
-
-        // Retrieve session
-        $this->session = $container->get('session');
 
         $this->session->setId(uniqid());
 
@@ -75,7 +81,22 @@ class SessionHelper extends AbstractHelper
     {
         $token = new UsernamePasswordToken($user, null, $firewall, $user->getRoles());
 
+        $this->dispatchInteractiveLoginEvent($token);
+
         $this->session->set('_security_' . $firewall, serialize($token));
         $this->session->save();
+    }
+
+    /**
+     * Dispatch an interactive login event
+     *
+     * @param \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken $token
+     */
+    private function dispatchInteractiveLoginEvent(UsernamePasswordToken $token)
+    {
+        $request    = new Request();
+        $loginEvent = new InteractiveLoginEvent($request, $token);
+
+        $this->container->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
     }
 }
