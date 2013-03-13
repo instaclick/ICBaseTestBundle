@@ -43,7 +43,7 @@ class SessionHelper extends AbstractHelper
         parent::__construct($testCase);
 
         $client     = $this->testCase->getClient();
-        $cookieJar = $client->getCookieJar();
+        $cookieJar  = $client->getCookieJar();
 
         $this->container = $client->getContainer();
         $this->session   = $this->container->get('session');
