@@ -50,6 +50,7 @@ class SessionHelper extends AbstractHelper
         $this->client    = $this->testCase->getClient();
         $this->container = $this->client->getContainer();
         $this->session   = $this->container->get('session');
+        $cookieJar       = $this->client->getCookieJar();
 
         // Required parameter to be defined, preventing "hasPreviousSession" in Request to return false.
         $options = $this->container->getParameter('session.storage.options');
@@ -61,7 +62,7 @@ class SessionHelper extends AbstractHelper
         $this->session->setId(uniqid());
 
         // Assign session cookie information referring to session id, allowing consecutive requests session recovering
-        $this->client->getCookieJar()->set(new Cookie($options['name'], $this->session->getId()));
+        $cookieJar->set(new Cookie($options['name'], $this->session->getId()));
     }
 
     /**
