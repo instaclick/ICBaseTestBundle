@@ -85,7 +85,7 @@ abstract class WebTestCase extends BaseWebTestCase
             if ($property->isStatic() || 0 === strncmp($property->getDeclaringClass()->getName(), 'PHPUnit_', 8)) {
                 continue;
             }
-            
+
             $property->setAccessible(true);
             $property->setValue($this, null);
         }
@@ -156,7 +156,7 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * Overwrite assertNull to avoid segmentation fault 
+     * Overwrite assertNull to avoid segmentation fault
      * when comparing to Objects.
      *
      * @param mixed  $actual  Actual value
@@ -194,6 +194,7 @@ abstract class WebTestCase extends BaseWebTestCase
             'session'     => __NAMESPACE__ . '\Helper\SessionHelper',
             'validator'   => __NAMESPACE__ . '\Helper\ValidatorHelper',
             'persistence' => __NAMESPACE__ . '\Helper\PersistenceHelper',
+            'route'       => __NAMESPACE__ . '\Helper\RouteHelper'
         ));
     }
 
