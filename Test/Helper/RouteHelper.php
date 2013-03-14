@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 Instaclick Inc.
+ * @copyright 2013 Instaclick Inc.
  */
 
 namespace IC\Bundle\Base\TestBundle\Test\Helper;
