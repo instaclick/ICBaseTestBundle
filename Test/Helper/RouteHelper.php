@@ -17,9 +17,11 @@ class RouteHelper extends AbstractHelper
 {
     /**
      * Retrieve a generated route from a route id.
+     * If the route is not registered then the test is skipped.
      *
      * @param string $id            Route id
      * @param array  $parameterList Route parameters
+     * @param bool   $absolute      Route absolution
      *
      * @return mixed
      */
@@ -32,7 +34,7 @@ class RouteHelper extends AbstractHelper
         try {
             return $router->generate($id, $parameterList, $absolute);
         } catch (RouteNotFoundException $exception) {
-            return false;
+            $this->testCase->markTestSkipped(sprintf('Failed to acquire route [%]', $id));
         }
     }
 }
