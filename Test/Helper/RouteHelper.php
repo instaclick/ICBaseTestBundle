@@ -5,7 +5,6 @@
 
 namespace IC\Bundle\Base\TestBundle\Test\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
