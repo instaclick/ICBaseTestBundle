@@ -65,6 +65,11 @@ abstract class WebTestCase extends BaseWebTestCase
         $fixtureLoader = new Loader\FixtureLoader($this->client);
         $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
 
+        $dbalFixtureList = static::getDBALFixtureList();
+        $dbalLoader      = new Loader\DBALLoader($this->client);
+
+        $dbalLoader->load(static::MANAGER_NAME, $dbalFixtureList);
+
         $this->referenceRepository = $executor->getReferenceRepository();
 
         $cacheDriver = $this->referenceRepository->getManager()->getMetadataFactory()->getCacheDriver();
@@ -214,6 +219,16 @@ abstract class WebTestCase extends BaseWebTestCase
      * @return array
      */
     protected static function getFixtureList()
+    {
+        return array();
+    }
+
+    /**
+     * Overwritable method for DBAL fixtures importing
+     *
+     * @return array
+     */
+    protected static function getDBALFixtureList()
     {
         return array();
     }
