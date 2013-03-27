@@ -6,9 +6,10 @@ code will become stable at a certain point, but for now, use at your own risk.
 
 ## Introduction
 
-This bundle provides lower level support for functional tests on Symfony2.
-Through the concept of helpers and loaders, this bundle supports individual
-support for test types, such as Command, Controller, Service, Validator, etc.
+This bundle provides lower level support for unit and functional tests on
+Symfony2. Through the concept of helpers and loaders, this bundle supports
+individual support for test types, such as Command, Controller, Service,
+Validator, etc.
 
 This bundle requires that you are using, at least, Symfony 2.1.
 
@@ -49,6 +50,110 @@ Installing this bundle can be done through these simple steps:
         test: ~
         session:
             name: "myapp"
+```
+
+## Unit Testing
+
+By default, Symfony2 does not provide a native customized support for unit test
+creation. To mitigate this problem, this bundle contains a wide set of basic
+unit test abstraction to help you with this job.
+
+### Bundle testing
+
+Most people do not even think about testing a bundle initialization. This is a
+bad concept, because every line of code deserves to be tested, even though you
+may not have manually create a class.
+Bundle classes are known to be the place to register your CompilerPass
+instances. No matter if you have a CompilerPass or not, it is a good practice
+to create a default test for your Bundle class.
+Here is an example on how to achieve it:
+
+```php
+use IC\Bundle\Base\TestBundle\Test\BundleTestCase;
+use IC\Bundle\Base\MailBundle\ICBaseMailBundle;
+
+class ICBaseMailBundleTest extends BundleTestCase
+{
+    public function testBuild()
+    {
+        $bundle = new ICBaseMailBundle();
+
+        $bundle->build($this->container);
+
+        // Add your tests here
+    }
+}
+```
+
+### Dependency Injection
+
+#### Configuration testing
+
+Just like Bundle classes, Configuration classes are very easy to forget
+testing. Testing this specific test is a good approach because it validates
+your line of thought with Bundle configuration normalization of parameters or
+even configuration default values. ICBaseTestBundle already provides a small
+class that can help you with this task.
+
+```php
+use IC\Bundle\Base\TestBundle\Test\DependencyInjection\ConfigurationTestCase;
+use IC\Bundle\Base\MailBundle\DependencyInjection\Configuration;
+
+class ConfigurationTest extends ConfigurationTestCase
+{
+    public function testDefaults()
+    {
+        $configuration = $this->processConfiguration(new Configuration(), array());
+
+        $this->assertEquals('INBOX', $configuration['mail_bounce']['mailbox']);
+    }
+
+    // ...
+}
+```
+
+#### Extension testing
+
+Testing the DependencyInjection Extension helps you to validate your service
+definitions and container configuration.
+Helpful methods available to you:
+* `assertAlias($expected, $key)`
+* `assertParameter($expected, $key)`
+* `assertHasDefinition($id)`
+* `assertDICConstructorArguments(Definition $definition, array $arguments)`
+* `assertDICDefinitionClass(Definition $definition, $expectedClass)`
+* `assertDICDefinitionMethodCallAt($position, Definition $definition, $methodName, array $params = null)`
+
+```php
+use IC\Bundle\Base\TestBundle\Test\DependencyInjection\ExtensionTestCase;
+use IC\Bundle\Base\MailBundle\DependencyInjection\ICBaseMailExtension;
+
+class ICBaseMailExtensionTest extends ExtensionTest
+{
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testInvalidConfiguration()
+    {
+        $loader        = new ICBaseMailExtension();
+        $configuration = array();
+
+        $this->load($extension, $configuration);
+    }
+
+    public function testValidConfiguration()
+    {
+        $this->createFullConfiguration();
+
+        $this->assertParameter('John Smith', 'ic_base_mail.composer.default_sender.name');
+
+        $this->assertDICConstructorArguments('ic_base_mail.service.composer', array());
+        $this->assertDICConstructorArguments('ic_base_mail.service.sender', array());
+        $this->assertDICConstructorArguments('ic_base_mail.service.bounce_mail', array());
+    }
+
+    // ...
+}
 ```
 
 ## Creating your first functional test
