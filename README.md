@@ -156,6 +156,46 @@ class ICBaseMailExtensionTest extends ExtensionTest
 }
 ```
 
+### Validator testing
+
+Validators are a key part of the system, because it helps you verify your
+business are being respected. Testing them becomes even more crucial.
+Constraints can generate violations at different locations. In order to help
+you verify it assigns it to correct place, `ValidatorTestCase` provides you
+a set of methods:
+* `assertValid(ConstraintValidator $validator, Constraint $constraint, $value)`
+* `assertInvalid(ConstraintValidator $validator, Constraint $constraint, $value, $message, array $parameters = array())`
+* `assertInvalidAtPath(ConstraintValidator $validator, Constraint $constraint, $value, $type, $message, array $parameters = array())`
+* `assertInvalidAtSubPath(ConstraintValidator $validator, Constraint $constraint, $value, $type, $message, array $parameters = array())`
+
+```php
+use MyBundle\Validator\Constraints;
+use IC\Bundle\Base\TestBundle\Test\Validator\ValidatorTestCase;
+
+class BannedEmailValidatorTest extends ValidatorTestCase
+{
+    public function testValid()
+    {
+        $validator  = new Constraints\BannedEmailValidator();
+        $constraint = new Constraints\BannedEmail();
+        $value      = 'email@domain.com';
+
+        $this->assertValid($validator, $constraint, $value);
+    }
+
+    public function testInvalid()
+    {
+        $validator  = new Constraints\BannedEmailValidator();
+        $constraint = new Constraints\BannedEmail();
+        $value      = 'domain.com';
+        $message    = 'Please provide a valid email.';
+        $parameters = array();
+
+        $this->assertInvalid($validator, $constraint, $value, $message, $parameters);
+    }
+}
+```
+
 ## Creating your first functional test
 
 Just like a Symfony2 test, implementing a functional test is easy:

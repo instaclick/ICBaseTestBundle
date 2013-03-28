@@ -42,6 +42,7 @@ abstract class ValidatorTestCase extends TestCase
              ->expects($this->never())
              ->method($methodName);
 
+        $validator->initialize($context);
         $validator->validate($value, $constraint);
     }
 
@@ -64,6 +65,7 @@ abstract class ValidatorTestCase extends TestCase
              ->method('addViolation')
              ->with($message, $parameters);
 
+        $validator->initialize($context);
         $validator->validate($value, $constraint);
     }
 
@@ -86,6 +88,7 @@ abstract class ValidatorTestCase extends TestCase
              ->method('addViolationAtPath')
              ->with($type, $message, $parameters);
 
+        $validator->initialize($context);
         $validator->validate($value, $constraint);
     }
 
@@ -111,6 +114,7 @@ abstract class ValidatorTestCase extends TestCase
              ->method($methodName)
              ->with($type, $message, $parameters);
 
+        $validator->initialize($context);
         $validator->validate($value, $constraint);
     }
 
