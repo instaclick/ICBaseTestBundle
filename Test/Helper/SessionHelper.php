@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase;
 
 /**
  * Session helper class.

@@ -5,7 +5,7 @@
 
 namespace IC\Bundle\Base\TestBundle\Test\Helper;
 
-use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase;
 
 /**
  * Persistence helper class.
@@ -33,6 +33,7 @@ class PersistenceHelper extends AbstractHelper
      * Transforms reference key to a reference or list of references
      *
      * @param mixed $reference
+     *
      * @return mixed
      */
     public function transformToReference($reference)

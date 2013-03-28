@@ -5,8 +5,8 @@
 
 namespace IC\Bundle\Base\TestBundle\DataFixtures;
 
-use Doctrine\Common\Persistence\ObjectManager,
-    Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 
 /**
  * Abstract Fixture Create
@@ -28,6 +28,7 @@ abstract class AbstractFixtureCreate extends AbstractFixture
             }
 
             $entity = $this->buildEntity($data);
+
             if ( ! $entity) {
                 continue;
             }

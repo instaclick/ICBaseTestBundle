@@ -17,5 +17,5 @@ interface Helper
      *
      * @param \PHPUnit_Framework_TestCase $testCase
      */
-    function __construct(\PHPUnit_Framework_TestCase $testCase);
+    public function __construct(\PHPUnit_Framework_TestCase $testCase);
 }

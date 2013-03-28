@@ -24,7 +24,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->helperList);
 

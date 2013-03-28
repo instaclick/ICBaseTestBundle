@@ -52,7 +52,6 @@ abstract class ValidatorTestCase extends TestCase
      * @param \Symfony\Component\Validator\ConstraintValidator $validator
      * @param \Symfony\Component\Validator\Constraint          $constraint
      * @param mixed                                            $value
-     * @param string                                           $type
      * @param string                                           $message
      * @param array                                            $parameters
      */

@@ -23,7 +23,7 @@ abstract class BundleTestCase extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -33,7 +33,7 @@ abstract class BundleTestCase extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->container);
 

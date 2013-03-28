@@ -8,9 +8,7 @@ namespace IC\Bundle\Base\TestBundle\Test\Loader;
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as SqliteDriver;
-
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -87,7 +85,6 @@ class SchemaLoader
             case ($connection->getDriver() instanceof SqliteDriver):
                 $this->loadSqliteSchema();
                 break;
-
             default:
                 $purger = new ORMPurger($this->entityManager);
                 $purger->setPurgeMode($purgeMode);
@@ -102,7 +99,6 @@ class SchemaLoader
 
     /**
      * Load SQLite Driver Schema.
-     *
      */
     private function loadSqliteSchema()
     {

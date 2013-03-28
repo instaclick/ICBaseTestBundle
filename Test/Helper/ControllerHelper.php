@@ -6,8 +6,7 @@
 namespace IC\Bundle\Base\TestBundle\Test\Helper;
 
 use Symfony\Component\HttpFoundation\Request;
-
-use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase;
 
 /**
  * Controller helper class.

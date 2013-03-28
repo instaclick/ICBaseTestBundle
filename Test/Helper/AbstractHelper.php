@@ -5,7 +5,7 @@
 
 namespace IC\Bundle\Base\TestBundle\Test\Helper;
 
-use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase;
 
 /**
  * Abstract helper class.
@@ -15,14 +15,14 @@ use IC\Bundle\Base\TestBundle\Test\WebTestCase;
 abstract class AbstractHelper
 {
     /**
-     * @var \IC\Bundle\Base\TestBundle\Test\WebTestCase
+     * @var \IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase
      */
     protected $testCase;
 
     /**
      * Define the helper client.
      *
-     * @param \IC\Bundle\Base\TestBundle\Test\WebTestCase $testCase
+     * @param \IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase $testCase
      */
     public function __construct(WebTestCase $testCase)
     {

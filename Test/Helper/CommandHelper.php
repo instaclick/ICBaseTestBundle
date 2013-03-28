@@ -8,10 +8,8 @@ namespace IC\Bundle\Base\TestBundle\Test\Helper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
-
 use Symfony\Bundle\FrameworkBundle\Console\Application as ConsoleApplication;
-
-use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase;
 
 /**
  * Command helper class.

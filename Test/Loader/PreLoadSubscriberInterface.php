@@ -14,5 +14,10 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
  */
 interface PreLoadSubscriberInterface
 {
+    /**
+     * Preload fixture event lister
+     *
+     * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor
+     */
     public function preLoad(ORMExecutor $executor);
 }

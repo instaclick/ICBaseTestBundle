@@ -9,13 +9,9 @@ use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as SqliteDriver;
-
 use Doctrine\ORM\EntityManager;
-
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader as SymfonyFixtureLoader;
-
 use Symfony\Bundle\FrameworkBundle\Client;
 
 /**
@@ -89,7 +85,7 @@ class FixtureLoader
     /**
      * Prepare executor
      *
-     * @param \Doctrine\ORM\EntityManager   $entityManager
+     * @param \Doctrine\ORM\EntityManager $entityManager
      *
      * @return \Doctrine\Common\DataFixtures\Executor\ORMExecutor
      */
@@ -123,7 +119,6 @@ class FixtureLoader
             case ($connection->getDriver() instanceof SqliteDriver):
                 $this->loadSqliteFixtureList($executor, $classList);
                 break;
-
             default:
                 // Prepare schema
                 $schemaHelper = new SchemaLoader($executor->getObjectManager());
@@ -145,8 +140,8 @@ class FixtureLoader
     /**
      * Executes preload fixture event
      *
-     * @param array $fixtureList List of fixture objects
-     * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor
+     * @param array                                              $fixtureList List of fixture objects
+     * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor    Executor
      */
     private function executePreLoadSubscriberEvent($fixtureList, ORMExecutor $executor)
     {
@@ -162,8 +157,8 @@ class FixtureLoader
     /**
      * Executes postload fixture event
      *
-     * @param array $fixtureList List of fixture objects
-     * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor
+     * @param array                                              $fixtureList List of fixture objects
+     * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor    Executor
      */
     private function executePostLoadSubscriberEvent($fixtureList, ORMExecutor $executor)
     {

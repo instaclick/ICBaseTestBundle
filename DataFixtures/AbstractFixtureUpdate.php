@@ -5,8 +5,8 @@
 
 namespace IC\Bundle\Base\TestBundle\DataFixtures;
 
-use Doctrine\Common\Persistence\ObjectManager,
-    Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 
 /**
  * Abstract Fixture Update
@@ -30,6 +30,7 @@ abstract class AbstractFixtureUpdate extends AbstractFixture
             }
 
             $entity = $this->updateEntity($data, $this->getReference($referenceKey));
+
             if ( ! $entity) {
                 continue;
             }
@@ -45,7 +46,7 @@ abstract class AbstractFixtureUpdate extends AbstractFixture
     /**
      * Update an entity
      *
-     * @param array $data
+     * @param array  $data
      * @param object $entity
      *
      * @return object

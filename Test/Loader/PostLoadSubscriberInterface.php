@@ -14,5 +14,10 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
  */
 interface PostLoadSubscriberInterface
 {
+    /**
+     * Post load fixture event listener
+     *
+     * @param \Doctrine\Common\DataFixtures\Executor\ORMExecutor $executor
+     */
     public function postLoad(ORMExecutor $executor);
 }

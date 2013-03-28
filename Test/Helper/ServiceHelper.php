@@ -17,8 +17,9 @@ class ServiceHelper extends AbstractHelper
     /**
      * Retrieve a mock object of a given service name.
      *
-     * @param string $id    Service identifier
-     * @param string $scope Service scope (default="container")
+     * @param string  $id              Service identifier
+     * @param string  $scope           Service scope (default="container")
+     * @param boolean $modifyContainer Modify container?
      *
      * @return mixed
      */

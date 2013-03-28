@@ -24,7 +24,7 @@ abstract class ConfigurationTestCase extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ abstract class ConfigurationTestCase extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->processor);
 
