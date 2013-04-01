@@ -126,13 +126,13 @@ abstract class WebTestCase extends TestCase
     }
 
     /**
-     * Retrieve a mock object of a given class name.
+     * Create a mock object of a given class name.
      *
      * @param string $class Class name
      *
      * @return mixed
      */
-    public function getClassMock($class)
+    public function createMock($class)
     {
         return $this
             ->getMockBuilder($class)

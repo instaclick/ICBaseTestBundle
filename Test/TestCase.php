@@ -19,7 +19,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
-    private $helperList = null;
+    private $helperList;
 
     /**
      * {@inheritdoc}
@@ -63,5 +63,31 @@ abstract class TestCase extends BaseTestCase
         }
 
         return new $helperClass($this);
+    }
+
+    /**
+     * Create a mock object of a given class name.
+     *
+     * @param string $class Class name
+     *
+     * @return mixed
+     */
+    public function createMock($class)
+    {
+        return $this
+            ->getMockBuilder($class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @deprecated
+     * @throws \BadMethodCallException
+     */
+    public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false)
+    {
+        throw new \BadMethodCallException('Deprecated method. Please use $this->createMock() or $this->getMockBuilder().');
     }
 }
