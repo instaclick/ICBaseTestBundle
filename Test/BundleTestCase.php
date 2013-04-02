@@ -6,6 +6,7 @@
 namespace IC\Bundle\Base\TestBundle\Test;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use IC\Bundle\Base\TestBundle\Test\TestCase;
 
 /**
