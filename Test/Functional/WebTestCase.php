@@ -6,7 +6,7 @@
 namespace IC\Bundle\Base\TestBundle\Test\Functional;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use IC\Bundle\Base\TestBundle\Test\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 
 /**
  * Abstract class for Web test cases
@@ -17,7 +17,7 @@ use IC\Bundle\Base\TestBundle\Test\TestCase;
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  * @author Danilo Cabello <danilo.cabello@gmail.com>
  */
-abstract class WebTestCase extends TestCase
+abstract class WebTestCase extends BaseWebTestCase
 {
     const ENVIRONMENT = 'test';
 

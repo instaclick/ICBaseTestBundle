@@ -79,15 +79,4 @@ abstract class TestCase extends BaseTestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     * @throws \BadMethodCallException
-     */
-    public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false)
-    {
-        throw new \BadMethodCallException('Deprecated method. Please use $this->createMock() or $this->getMockBuilder().');
-    }
 }
