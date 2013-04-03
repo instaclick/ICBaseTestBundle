@@ -50,10 +50,18 @@ abstract class TestCase extends BaseTestCase
      */
     public function getHelper($name)
     {
-        $normalizedName  = Inflector::classify(str_replace('/', '\\', $name));
-        $helperClass     = $this->helperList->containsKey($name)
-            ? $this->helperList->get($name)
+        $normalizedName  = $this->helperList->containsKey($name)
+            ? $name
+            : Inflector::classify(str_replace('/', '\\', $name));
+
+        $helperClass     = $this->helperList->containsKey($normalizedName)
+            ? $this->helperList->get($normalizedName)
             : sprintf('%s\Helper\%sHelper', __NAMESPACE__, $normalizedName);
+
+        if ( ! is_string($helperClass)) {
+            return $helperClass;
+        }
+
         $reflectionClass = new \ReflectionClass($helperClass);
 
         if ($reflectionClass->isAbstract() || $reflectionClass->isInterface()) {
@@ -62,7 +70,11 @@ abstract class TestCase extends BaseTestCase
             );
         }
 
-        return new $helperClass($this);
+        $helper = new $helperClass($this);
+
+        $this->helperList->set($normalizedName, $helper);
+
+        return $helper;
     }
 
     /**
