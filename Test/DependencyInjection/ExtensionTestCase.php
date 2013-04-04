@@ -6,42 +6,17 @@
 namespace IC\Bundle\Base\TestBundle\Test\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use IC\Bundle\Base\TestBundle\Test\TestCase;
+use IC\Bundle\Base\TestBundle\Test\ContainerAwareTestCase;
 
 /**
  * Dependency Injection Extension Unit test case
  *
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author Ryan Albon <ryanalbon@gmail.com>
  */
-abstract class ExtensionTestCase extends TestCase
+abstract class ExtensionTestCase extends ContainerAwareTestCase
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
-     */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->container = new ContainerBuilder();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown()
-    {
-        unset($this->container);
-
-        parent::tearDown();
-    }
-
     /**
      * Loads the configuration into a provided Extension.
      *
