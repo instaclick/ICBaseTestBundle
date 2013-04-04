@@ -40,11 +40,6 @@ abstract class WebTestCase extends BaseWebTestCase
     private $referenceRepository = null;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $helperList = null;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp()
@@ -52,8 +47,7 @@ abstract class WebTestCase extends BaseWebTestCase
         parent::setUp();
 
         // Initialize the client; it is used in all loaders and helpers
-        $this->client     = static::initializeClient();
-        $this->helperList = static::initializeHelperList();
+        $this->client = static::initializeClient();
 
         // Only initialize schema and fixtures if any are defined
         $fixtureList = static::getFixtureList();
@@ -164,24 +158,6 @@ abstract class WebTestCase extends BaseWebTestCase
             array('environment' => static::ENVIRONMENT),
             static::getServerParameters()
         );
-    }
-
-    /**
-     * Initialize test case helper list
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected static function initializeHelperList()
-    {
-        return new ArrayCollection(array(
-            'command'     => __NAMESPACE__ . '\Helper\CommandHelper',
-            'controller'  => __NAMESPACE__ . '\Helper\ControllerHelper',
-            'service'     => __NAMESPACE__ . '\Helper\ServiceHelper',
-            'session'     => __NAMESPACE__ . '\Helper\SessionHelper',
-            'validator'   => __NAMESPACE__ . '\Helper\ValidatorHelper',
-            'persistence' => __NAMESPACE__ . '\Helper\PersistenceHelper',
-            'route'       => __NAMESPACE__ . '\Helper\RouteHelper'
-        ));
     }
 
     /**

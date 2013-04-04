@@ -6,6 +6,7 @@
 namespace IC\Bundle\Base\TestBundle\Test;
 
 use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase as BaseWebTestCase;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Abstract class for Web test cases
@@ -14,6 +15,22 @@ use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase as BaseWebTestCase;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $helperList = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        // Initialize the client; it is used in all loaders and helpers
+        $this->helperList = static::initializeHelperList();
+    }
+
     /**
      * Create a mock object of a given class name.
      *
@@ -27,6 +44,38 @@ abstract class WebTestCase extends BaseWebTestCase
             ->getMockBuilder($class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    /**
+     * Initialize test case helper list
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected static function initializeHelperList()
+    {
+        return new ArrayCollection(array(
+            'command'     => __NAMESPACE__ . '\Helper\CommandHelper',
+            'controller'  => __NAMESPACE__ . '\Helper\ControllerHelper',
+            'service'     => __NAMESPACE__ . '\Helper\ServiceHelper',
+            'session'     => __NAMESPACE__ . '\Helper\SessionHelper',
+            'validator'   => __NAMESPACE__ . '\Helper\ValidatorHelper',
+            'persistence' => __NAMESPACE__ . '\Helper\PersistenceHelper',
+            'route'       => __NAMESPACE__ . '\Helper\RouteHelper'
+        ));
+    }
+
+    /**
+     * Retrieve a helper instance giving a helper name.
+     *
+     * @param string $name
+     *
+     * @return \IC\Bundle\Base\TestBundle\Test\Helper\AbstractHelper
+     */
+    public function getHelper($name)
+    {
+        $helperClass = $this->helperList->get($name);
+
+        return new $helperClass($this);
     }
 
 }
