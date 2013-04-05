@@ -12,22 +12,22 @@ namespace IC\Bundle\Base\TestBundle\Test\Helper\Unit;
  */
 class EntityHelper extends UnitHelper
 {
-	/**
-	 * @var array
-	 */
-	private $identityMap = array();
+    /**
+     * @var array
+     */
+    private $identityMap = array();
 
-	/**
-	 * Create an Entity Mock instance.
-	 *
-	 * @param string $entityClassName
-	 * @param mixed  $id
-	 */
+    /**
+     * Create an Entity Mock instance.
+     *
+     * @param string $entityClassName
+     * @param mixed  $id
+     */
     public function createMock($entityClassName, $id)
     {
-    	if (isset($this->identityMap[$entityClassName]) && isset($this->identityMap[$entityClassName][$id])){
-    		return $this->identityMap[$entityClassName][$id];
-    	}
+        if (isset($this->identityMap[$entityClassName]) && isset($this->identityMap[$entityClassName][$id])){
+            return $this->identityMap[$entityClassName][$id];
+        }
 
         $entity = $this->testCase
             ->getMockBuilder($entityClassName)
@@ -35,8 +35,8 @@ class EntityHelper extends UnitHelper
             ->getMock();
              
         $entity->expects($this->testCase->any())
-               ->method('getId')
-               ->will($this->testCase->returnValue($id));
+            ->method('getId')
+            ->will($this->testCase->returnValue($id));
         
         $this->identityMap[$entityClassName][$id] = $entity;
 
