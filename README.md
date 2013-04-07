@@ -62,7 +62,8 @@ unit test abstraction to help you with this job.
 
 Most people do not even think about testing a bundle initialization. This is a
 bad concept, because every line of code deserves to be tested, even though you
-may not have manually create a class.
+may not have manually created a class.
+
 Bundle classes are known to be the place to register your CompilerPass
 instances. No matter if you have a CompilerPass or not, it is a good practice
 to create a default test for your Bundle class.
@@ -89,7 +90,7 @@ class ICBaseMailBundleTest extends BundleTestCase
 
 #### Configuration testing
 
-Just like Bundle classes, Configuration classes are very easy to forget
+Just like Bundle classes, Configuration classes are very easy to overlook when
 testing. Testing this specific test is a good approach because it validates
 your line of thought with Bundle configuration normalization of parameters or
 even configuration default values. ICBaseTestBundle already provides a small
@@ -159,9 +160,9 @@ class ICBaseMailExtensionTest extends ExtensionTest
 ### Validator testing
 
 Validators are a key part of the system, because it helps you verify your
-business are being respected. Testing them becomes even more crucial.
+business rules are being respected. Testing them becomes even more crucial.
 Constraints can generate violations at different locations. In order to help
-you verify it assigns it to correct place, `ValidatorTestCase` provides you
+you verify it assigns it at the correct place, `ValidatorTestCase` provides you
 a set of methods:
 * `assertValid(ConstraintValidator $validator, Constraint $constraint, $value)`
 * `assertInvalid(ConstraintValidator $validator, Constraint $constraint, $value, $message, array $parameters = array())`
@@ -217,7 +218,7 @@ class MyFunctionalTest extends WebTestCase
 
 When building your functional tests, it is recurrent that you want your test
 Database to be created and populated with initial information. This bundle
-comes with a native support for Doctrine Data Fixtures, which allows you to
+comes with native support for Doctrine Data Fixtures, which allows you to
 load your database information before your test is actually executed.
 
 To enable your schema to be initialized and also load the initial Database
@@ -292,7 +293,7 @@ protected static function getServerParameters()
 
 ### Changing Client initialization
 
-Most of the times, overriding `createClient` is enough. Whenever you need more
+Oftentimes, overriding `createClient` is enough. Whenever you need more
 refined support, you can still override the default Client initialization by
 overriding the protected static method `initializeClient` (sample is actually
 the default implementation of the method):
