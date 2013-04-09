@@ -418,9 +418,12 @@ list of available helpers:
 
 * Command
 * Controller
+* Persistence
+* Route
 * Service
 * Session
 * Validator
+* Unit/Entity
 
 #### Command Helper
 
@@ -491,6 +494,48 @@ public function testViewAction()
 }
 ```
 
+#### Persistence Helper
+
+This helper is available to you under the name `persistence`.
+The persistence helper transforms a reference key to a reference object,
+or a list of reference keys to a list of reference objects.
+
+```php
+public function testFoo()
+{
+    $persistenceHelper = $this->getHelper('persistence');
+
+    $credentialList = $persistenceHelper->transformToReference(
+        array(
+            'core.security.credential#admin',
+            'core.security.credential#user',
+        )
+    );
+
+    ...
+}
+```
+
+#### Route Helper
+
+This helper is available to you under the name `route`.
+The Route helper provides a method to retrieve a generated route from a route id.
+Moreover, if the route is not registered, the test is marked as skipped.
+
+```php
+/**
+ * @dataProvider provideRouteData
+ */
+public function testRoute($routeId, $parameters)
+{
+    $routeHelper = $this->getHelper('route');
+
+    $route = $routeHelper->getRoute($routeId, $parameters, $absolute = false);
+
+    ...
+}
+```
+
 #### Service Helper
 
 This helper is available to you under the name `service`.
@@ -557,6 +602,22 @@ public function testSuccessValidate($value)
 
     // Testing
     $validatorHelper->success($value);
+}
+```
+
+#### Unit/Entity Helper
+
+This helper is available to you under the name `Unit/Entity`.
+The Unit/Entity helper helps to create Entity stubs where there is no setId() method.
+
+```php
+public function testFoo()
+{
+    $entityHelper = $this->getHelper('Unit/Entity');
+
+    $entity = $entityHelper->createMock('IC\Bundle\Base\GeographicalBundle\Entity\Country', 'us');
+
+    ...
 }
 ```
 
