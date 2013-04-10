@@ -424,6 +424,7 @@ list of available helpers:
 * Session
 * Validator
 * Unit/Entity
+* Unit/Function
 
 #### Command Helper
 
@@ -616,6 +617,38 @@ public function testFoo()
     $entityHelper = $this->getHelper('Unit/Entity');
 
     $entity = $entityHelper->createMock('IC\Bundle\Base\GeographicalBundle\Entity\Country', 'us');
+
+    ...
+}
+```
+
+#### Unit/Function Helper
+
+This helper is available to you under the name `Unit/Function`.
+The Unit/Function helper helps to mock built-in PHP functions.  Note: the subject under test must
+be a namespaced class.
+
+```php
+public function testFoo()
+{
+    $functionHelper = $this->getHelper('Unit/Function');
+
+    // mock ftp_open() to return null (default)
+    $functionHelper->mock('ftp_open');
+
+    // mock ftp_open() to return true
+    $functionHelper->mock('ftp_open', true);
+
+    // mock ftp_open() with callable
+    $functionHelper->mock('ftp_open', function () { return null; });
+
+    // mock ftp_open() with a mock object; note: the method is always 'invoke'
+    $fopenProxy = $functionHelper->createMock();
+    $fopenProxy->expects($this->once())
+               ->method('invoke')
+               ->will($this->returnValue(true));
+
+    $functionHelper->mock('ftp_open', $fopenProxy);
 
     ...
 }
