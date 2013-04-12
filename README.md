@@ -58,6 +58,50 @@ By default, Symfony2 does not provide a native customized support for unit test
 creation. To mitigate this problem, this bundle contains a wide set of basic
 unit test abstraction to help you with this job.
 
+### Protected/Private
+
+There may be times where you want to directly test a protected/private method
+or access a non-public property (and the class lacks a getter or setter).
+For example, the call chain from the closest public method is sufficiently
+long to make testing an arduous task.
+
+To overcome this obstacle, TestCase provides some methods to assist you.
+
+Let's say this is your subject under test:
+
+```php
+class Foo
+{
+    protected $bar;
+
+    private function getBar()
+    {
+        return $this->bar;
+    }
+}
+```
+
+Here is an example:
+
+```php
+use IC\Bundle\Base\TestBundle\Test\TestCase;
+
+class ICFooBarBundleTest extends TestCase
+{
+    public function testGetBar()
+    {
+        $subject = new Foo;
+        $expected = 'Hello';
+
+        $this->setPropertyOnObject($subject, 'bar', $expected);
+
+        $method = $this->makeCallable($subject, 'getBar');
+
+        $this->assertEquals($expected, $method->invoke($subject));
+    }
+}
+``` 
+
 ### Bundle testing
 
 Most people do not even think about testing a bundle initialization. This is a
