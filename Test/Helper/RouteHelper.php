@@ -33,7 +33,7 @@ class RouteHelper extends AbstractHelper
         try {
             return $router->generate($id, $parameterList, $absolute);
         } catch (RouteNotFoundException $exception) {
-            $this->testCase->markTestSkipped(sprintf('Failed to acquire route [%]', $id));
+            $this->testCase->markTestSkipped(sprintf('Failed to acquire route [%s]', $id));
         }
     }
 }
