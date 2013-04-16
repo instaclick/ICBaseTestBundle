@@ -101,6 +101,7 @@ class SessionHelper extends AbstractHelper
         $request    = $this->client->getRequest() ?: new Request();
         $loginEvent = new InteractiveLoginEvent($request, $token);
 
+        $this->container->get('security.context')->setToken($token);
         $this->container->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
     }
 }
