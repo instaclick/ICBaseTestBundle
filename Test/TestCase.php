@@ -91,4 +91,34 @@ abstract class TestCase extends BaseTestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
+
+    /**
+     * Make private and protected function callable
+     *
+     * @param mixed  $object   Subject under test
+     * @param string $function Function name
+     *
+     * @return \ReflectionMethod
+     */
+    public function makeCallable($object, $function)
+    {
+        $method = new \ReflectionMethod($object, $function);
+        $method->setAccessible(true);
+
+        return $method;
+    }
+
+    /**
+     * Sets the given property to given value on Object in Test
+     *
+     * @param mixed  $object Subject under test
+     * @param string $name   Property name
+     * @param mixed  $value  Value
+     */
+    public function setPropertyOnObject($object, $name, $value)
+    {
+        $property = new \ReflectionProperty($object, $name);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+    }
 }
