@@ -22,7 +22,7 @@ Installing this bundle can be done through these simple steps:
     // composer.json
     {
         // ...
-        require: {
+        require-dev: {
             // ...
             "instaclick/base-test-bundle": "dev-master"
         }
