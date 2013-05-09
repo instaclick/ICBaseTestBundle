@@ -52,6 +52,16 @@ class ValidatorHelper extends AbstractHelper
     }
 
     /**
+     * Define the execution context.
+     *
+     * @param \Symfony\Component\Validator\ExecutionContext $context
+     */
+    public function setExecutionContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
      * Define the constraint validator class name.
      *
      * @param string $validatorClass
