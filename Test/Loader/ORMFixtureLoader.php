@@ -13,6 +13,7 @@ use Doctrine\DBAL\Driver\PDOSqlite\Driver as SqliteDriver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader as SymfonyFixtureLoader;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Data Fixture Loader
@@ -23,12 +24,12 @@ use Symfony\Bundle\FrameworkBundle\Client;
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  * @author John Cartwright <jcartdev@gmail.com>
  */
-class FixtureLoader
+class ORMFixtureLoader
 {
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Client
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    private $client;
+    private $container;
 
     /**
      * @var integer
@@ -40,9 +41,9 @@ class FixtureLoader
      *
      * @param \Symfony\Bundle\FrameworkBundle\Client $client
      */
-    public function __construct(Client $client)
+    public function __construct(ContainerInterface $container)
     {
-        $this->client    = $client;
+        $this->container = $container;
         $this->purgeMode = ORMPurger::PURGE_MODE_TRUNCATE;
     }
 
@@ -69,8 +70,7 @@ class FixtureLoader
      */
     public function load($managerName = null, array $classList = array())
     {
-        $container       = $this->client->getContainer();
-        $managerRegistry = $container->get('doctrine');
+        $managerRegistry = $this->container->get('doctrine');
         $entityManager   = $managerRegistry->getEntityManager($managerName);
 
         // Preparing executor
@@ -179,14 +179,13 @@ class FixtureLoader
      */
     private function loadSqliteFixtureList(ORMExecutor $executor, array $classList)
     {
-        $container      = $this->client->getContainer();
         $entityManager  = $executor->getObjectManager();
         $connection     = $entityManager->getConnection();
         $loader         = $this->getLoader($classList);
         $fixtureList    = $loader->getFixtures();
 
         $parameters     = $connection->getParams();
-        $cacheDirectory = $container->getParameter('kernel.cache_dir');
+        $cacheDirectory = $this->container->getParameter('kernel.cache_dir');
         $database       = isset($parameters['path']) ? $parameters['path'] : $parameters['dbname'];
         $backupDatabase = sprintf('%s/test_populated_%s.db', $cacheDirectory, md5(serialize($classList)));
 
@@ -227,8 +226,7 @@ class FixtureLoader
      */
     private function getLoader(array $classList)
     {
-        $container = $this->client->getContainer();
-        $loader    = new SymfonyFixtureLoader($container);
+        $loader    = new SymfonyFixtureLoader($this->container);
 
         foreach ($classList as $className) {
             $this->loadFixtureClass($loader, $className);
