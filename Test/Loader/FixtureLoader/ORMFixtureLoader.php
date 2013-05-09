@@ -3,7 +3,7 @@
  * @copyright 2012 Instaclick Inc.
  */
 
-namespace IC\Bundle\Base\TestBundle\Test\Loader;
+namespace IC\Bundle\Base\TestBundle\Test\Loader\FixtureLoader;
 
 use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

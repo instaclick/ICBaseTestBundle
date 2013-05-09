@@ -56,7 +56,8 @@ abstract class WebTestCase extends BaseWebTestCase
             return;
         }
 
-        $fixtureLoader = new Loader\FixtureLoader($this->client);
+        $factory       = new Loader\FixtureLoaderFactory();
+        $fixtureLoader = $factory->getLoader($this->client->getContainer());
         $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
 
         $this->referenceRepository = $executor->getReferenceRepository();

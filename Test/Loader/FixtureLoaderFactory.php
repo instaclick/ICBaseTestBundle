@@ -6,25 +6,31 @@
 namespace IC\Bundle\Base\TestBundle\Test\Loader;
 
 use Symfony\Bundle\FrameworkBundle\Client;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * This factory returns the fixture loader which
+ * corresponds to the current ManagerRegistry type
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
  */
 class FixtureLoaderFactory
 {
-    public function getLoader(ContainerInterface $container)
+    public function getLoader(ContainerInterface $container, $managerName = null)
     {
         $managerRegistry = $container->get('doctrine');
 
         if ($managerRegistry instanceof ManagerRegistry) {
-            $objectManager = $registry->getManager($omName);
-            $type          = $registry->getName();
+            $objectManager = $managerRegistry->getManager($managerName);
+            $type          = $managerRegistry->getName();
         } else {
-            $objectManager = $register->getEntityManager();
+            $objectManager = $managerRegistry->getEntityManager();
             $type = 'ORM';
         }
 
-        $loaderFQN = sprintf('\IC\Bundle\Base\TestBundle\Test\Loader\%sFixtureLoader', 
+        $loaderFQN = sprintf(
+            '\IC\Bundle\Base\TestBundle\Test\Loader\FixtureLoader\%sFixtureLoader', 
             $type
         );
 
