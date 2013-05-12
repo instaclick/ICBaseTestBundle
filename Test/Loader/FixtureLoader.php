@@ -43,7 +43,7 @@ class FixtureLoader
     public function __construct(Client $client)
     {
         $this->client    = $client;
-        $this->purgeMode = ORMPurger::PURGE_MODE_TRUNCATE;
+        $this->purgeMode = ORMPurger::PURGE_MODE_DELETE;
     }
 
     /**
