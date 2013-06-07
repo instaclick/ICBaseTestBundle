@@ -71,7 +71,7 @@ class FixtureLoader
     {
         $container       = $this->client->getContainer();
         $managerRegistry = $container->get('doctrine');
-        $entityManager   = $managerRegistry->getEntityManager($managerName);
+        $entityManager   = $managerRegistry->getManager($managerName);
 
         // Preparing executor
         $executor = $this->prepareExecutor($entityManager);
