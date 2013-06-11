@@ -9,7 +9,7 @@ namespace IC\Bundle\Base\TestBundle\Test\Helper\Unit;
  * Entity Helper, which helps to create Entity Stubs.
  *
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author John Cartwright <johnc@nationalfibre.net>
+ * @author John Cartwright <jcartdev@gmail.net>
  */
 class EntityHelper extends UnitHelper
 {
@@ -85,7 +85,7 @@ class EntityHelper extends UnitHelper
             return;
         }
 
-        if ( ! isset($this->identityMap[$entityClassName]) ||  ! isset($this->identityMap[$entityClassName][$id])) {
+        if ( ! isset($this->identityMap[$entityClassName]) || ! isset($this->identityMap[$entityClassName][$id])) {
             return;
         }
 
