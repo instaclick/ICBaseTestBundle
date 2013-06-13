@@ -192,9 +192,18 @@ class ICBaseMailExtensionTest extends ExtensionTestCase
 
         $this->assertParameter('John Smith', 'ic_base_mail.composer.default_sender.name');
 
-        $this->assertDICConstructorArguments('ic_base_mail.service.composer', array());
-        $this->assertDICConstructorArguments('ic_base_mail.service.sender', array());
-        $this->assertDICConstructorArguments('ic_base_mail.service.bounce_mail', array());
+        $this->assertDICConstructorArguments(
+            $this->container->getDefinition('ic_base_mail.service.composer'),
+            array()
+        );
+        $this->assertDICConstructorArguments(
+            $this->container->getDefinition('ic_base_mail.service.sender'),
+            array()
+        );
+        $this->assertDICConstructorArguments(
+            $this->container->getDefinition('ic_base_mail.service.bounce_mail'),
+            array()
+        );
     }
 
     // ...
