@@ -173,7 +173,7 @@ Helpful methods available to you:
 use IC\Bundle\Base\TestBundle\Test\DependencyInjection\ExtensionTestCase;
 use IC\Bundle\Base\MailBundle\DependencyInjection\ICBaseMailExtension;
 
-class ICBaseMailExtensionTest extends ExtensionTest
+class ICBaseMailExtensionTest extends ExtensionTestCase
 {
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
