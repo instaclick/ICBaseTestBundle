@@ -173,7 +173,7 @@ Helpful methods available to you:
 use IC\Bundle\Base\TestBundle\Test\DependencyInjection\ExtensionTestCase;
 use IC\Bundle\Base\MailBundle\DependencyInjection\ICBaseMailExtension;
 
-class ICBaseMailExtensionTest extends ExtensionTest
+class ICBaseMailExtensionTest extends ExtensionTestCase
 {
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
@@ -192,9 +192,18 @@ class ICBaseMailExtensionTest extends ExtensionTest
 
         $this->assertParameter('John Smith', 'ic_base_mail.composer.default_sender.name');
 
-        $this->assertDICConstructorArguments('ic_base_mail.service.composer', array());
-        $this->assertDICConstructorArguments('ic_base_mail.service.sender', array());
-        $this->assertDICConstructorArguments('ic_base_mail.service.bounce_mail', array());
+        $this->assertDICConstructorArguments(
+            $this->container->getDefinition('ic_base_mail.service.composer'),
+            array()
+        );
+        $this->assertDICConstructorArguments(
+            $this->container->getDefinition('ic_base_mail.service.sender'),
+            array()
+        );
+        $this->assertDICConstructorArguments(
+            $this->container->getDefinition('ic_base_mail.service.bounce_mail'),
+            array()
+        );
     }
 
     // ...

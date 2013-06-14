@@ -51,6 +51,10 @@ abstract class TestCase extends BaseTestCase
      */
     public function getHelper($name)
     {
+        if ( ! $this->helperList) {
+            $this->helperList = new ArrayCollection();
+        }
+        
         $normalizedName  = $this->helperList->containsKey($name)
             ? $name
             : Inflector::classify(str_replace('/', '\\', $name));
