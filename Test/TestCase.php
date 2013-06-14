@@ -13,6 +13,7 @@ use Doctrine\Common\Util\Inflector;
  * Abstract class for Unit test cases
  *
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author John Cartwright <jcartdev@gmail.com>
  */
 abstract class TestCase extends BaseTestCase
 {
@@ -93,6 +94,24 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Create a mock object of a given abstract class name.
+     *
+     * @param string $class Class name
+     *
+     * @return mixed
+     */
+    public function createAbstractMock($class)
+    {
+        $methodList = $this->getMethodList($class);
+
+        return $this
+            ->getMockBuilder($class)
+            ->setMethods($methodList)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+    }
+
+    /**
      * Make private and protected function callable
      *
      * @param mixed  $object   Subject under test
@@ -120,5 +139,23 @@ abstract class TestCase extends BaseTestCase
         $property = new \ReflectionProperty($object, $name);
         $property->setAccessible(true);
         $property->setValue($object, $value);
+    }
+
+    /**
+     * Retrieve all the methods from a given class.
+     *
+     * @param string $class Class Name
+     *
+     * @return array
+     */
+    private function getMethodList($class)
+    {
+        $reducer = function(\ReflectionMethod $method) {
+            return $method->getName();
+        };
+
+        $reflector = new \ReflectionClass($class);
+
+        return array_map($reducer, $reflector->getMethods());
     }
 }
