@@ -180,7 +180,7 @@ class ICBaseMailExtensionTest extends ExtensionTestCase
      */
     public function testInvalidConfiguration()
     {
-        $loader        = new ICBaseMailExtension();
+        $extension     = new ICBaseMailExtension();
         $configuration = array();
 
         $this->load($extension, $configuration);
