@@ -255,7 +255,7 @@ class BannedEmailValidatorTest extends ValidatorTestCase
 Just like a Symfony2 test, implementing a functional test is easy:
 
 ```php
-use IC\Bundle\Base\TestBundle\Test\WebTestCase;
+use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase;
 
 class MyFunctionalTest extends WebTestCase
 {
