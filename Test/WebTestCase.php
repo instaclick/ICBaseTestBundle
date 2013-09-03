@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Abstract class for Web test cases
  *
- * @deprecated to be removed at a later date
+ * @deprecated to be removed at a later date. Please use IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase instead.
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
