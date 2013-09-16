@@ -22,19 +22,67 @@ class EntityHelper extends UnitHelper
      * Create an Entity Mock instance.
      *
      * @param string $entityClassName
-     * @param mixed  $id
+     * @param mixed  $readOnlyPropertyList
      */
-    public function createMock($entityClassName, $id = null)
+    public function createMock($entityClassName, $readOnlyPropertyList = null)
     {
-        if ($identity = $this->getIdentity($entityClassName, $id)) {
+        $readOnlyPropertyList = $this->normalizePropertyList($entityClassName, $readOnlyPropertyList);
+        $identifer            = $this->getIdentifer($readOnlyPropertyList);
+
+        if ($identifer && $identity = $this->getIdentity($entityClassName, $identifer)) {
             return $identity;
         }
 
-        $entity = $this->createEntityMock($entityClassName, $id);
+        $entity = $this->createEntityMock($entityClassName, $readOnlyPropertyList);
 
-        $this->storeIdentity($entityClassName, $id, $entity);
+        if ($identifer) {
+            $this->storeIdentity($entityClassName, $identifer, $entity);
+        }
 
         return $entity;
+    }
+
+    /**
+     * Retrieve the identifier.
+     *
+     * @param mixed $readOnlyPropertyList
+     *
+     * @return mixed string|false
+     */
+    private function getIdentifer($readOnlyPropertyList)
+    {
+        if ( ! isset($readOnlyPropertyList['id'])) {
+            return false;
+        }
+
+        $value = $readOnlyPropertyList['id']['value'];
+
+        return is_string($value) || is_numeric($value) ? $value : false;
+    }
+
+    /**
+     * Normalize the property list.
+     *
+     * @param string $entityClassName
+     * @param mixed  $readOnlyPropertyList
+     *
+     * @return array
+     */
+    private function normalizePropertyList($entityClassName, $readOnlyPropertyList)
+    {
+        // For BC, we need to support allowing this property to come in as an identifier
+        if (null === $readOnlyPropertyList || ! is_array($readOnlyPropertyList)) {
+            $readOnlyPropertyList = array('id' => $readOnlyPropertyList);
+        }
+
+        array_walk($readOnlyPropertyList, function(&$value, $key) {
+            $value = array(
+                'value'     => $value,
+                'getMethod' => sprintf('get%s', ucfirst($key)),
+            );
+        });
+
+        return $readOnlyPropertyList;
     }
 
     /**
@@ -45,30 +93,24 @@ class EntityHelper extends UnitHelper
      *
      * @return object
      */
-    private function createEntityMock($entityClassName, $id)
+    private function createEntityMock($entityClassName, $readOnlyPropertyMethodList)
     {
+        $methodExtractor = function($property) {
+            return $property['getMethod'];
+        };
+
         $entity = $this->testCase
             ->getMockBuilder($entityClassName)
-            ->setMethods(array('getId'))
+            ->setMethods(array_map($methodExtractor, $readOnlyPropertyMethodList))
             ->getMock();
 
-        $entity->expects($this->testCase->any())
-            ->method('getId')
-            ->will($this->testCase->returnValue($id));
+        foreach ($readOnlyPropertyMethodList as $property) {
+            $entity->expects($this->testCase->any())
+                ->method($property['getMethod'])
+                ->will($this->testCase->returnValue($property['value']));
+        }
 
         return $entity;
-    }
-
-    /**
-     * Check if the id is valid.
-     *
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    private function isIdentifiable($id)
-    {
-        return $id !== null;
     }
 
     /**
@@ -81,10 +123,6 @@ class EntityHelper extends UnitHelper
      */
     private function getIdentity($entityClassName, $id)
     {
-        if ( ! $this->isIdentifiable($id)) {
-            return;
-        }
-
         if ( ! isset($this->identityMap[$entityClassName]) || ! isset($this->identityMap[$entityClassName][$id])) {
             return;
         }
@@ -103,10 +141,6 @@ class EntityHelper extends UnitHelper
      */
     private function storeIdentity($entityClassName, $id, $entity)
     {
-        if ( ! $this->isIdentifiable($id)) {
-            return;
-        }
-
         $this->identityMap[$entityClassName][$id] = $entity;
     }
 }
