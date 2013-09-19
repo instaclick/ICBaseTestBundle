@@ -6,6 +6,7 @@
 namespace IC\Bundle\Base\TestBundle\Test\Functional;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use IC\Bundle\Base\TestBundle\Test\Loader;
 
@@ -23,6 +24,8 @@ abstract class WebTestCase extends BaseWebTestCase
     const ENVIRONMENT = 'test';
 
     const MANAGER_NAME = null;
+
+    const FIXTURES_PURGE_MODE = ORMPurger::PURGE_MODE_DELETE;
 
     /**
      * @var boolean
@@ -56,7 +59,7 @@ abstract class WebTestCase extends BaseWebTestCase
             return;
         }
 
-        $fixtureLoader = new Loader\FixtureLoader($this->client);
+        $fixtureLoader = new Loader\FixtureLoader($this->client, static::FIXTURES_PURGE_MODE);
         $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
 
         $this->referenceRepository = $executor->getReferenceRepository();

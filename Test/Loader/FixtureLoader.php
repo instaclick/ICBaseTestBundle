@@ -40,10 +40,10 @@ class FixtureLoader
      *
      * @param \Symfony\Bundle\FrameworkBundle\Client $client
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, $purgeMode = ORMPurger::PURGE_MODE_DELETE)
     {
         $this->client    = $client;
-        $this->purgeMode = ORMPurger::PURGE_MODE_DELETE;
+        $this->purgeMode = $purgeMode;
     }
 
     /**
