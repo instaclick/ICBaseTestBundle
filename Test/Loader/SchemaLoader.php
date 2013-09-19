@@ -9,6 +9,7 @@ use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as SqliteDriver;
+use Doctrine\DBAL\Driver\PDOMySql\Driver as MySqlDriver;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -76,6 +77,8 @@ class SchemaLoader
      * Load the Database Schema.
      *
      * @param integer $purgeMode
+     *
+     * @TODO: Remove the FK checks when Doctrine comes up with a solution for truncating tables with FK constraints
      */
     public function load($purgeMode = ORMPurger::PURGE_MODE_TRUNCATE)
     {
@@ -92,7 +95,17 @@ class SchemaLoader
                 $executor = new ORMExecutor($this->entityManager, $purger);
                 $executor->setReferenceRepository(new ReferenceRepository($this->entityManager));
 
+                // Temporary fix for making fixtures work with MySQL versions >= 5.5
+                if ($connection->getDriver() instanceof MySqlDriver) {
+                    $connection->exec('SET foreign_key_checks=0');
+                }
+
                 $executor->purge();
+
+                // Resetting the FK checks
+                if ($connection->getDriver() instanceof MySqlDriver) {
+                    $connection->exec('SET foreign_key_checks=1');
+                }
                 break;
         }
     }
