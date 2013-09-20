@@ -97,15 +97,28 @@ class SchemaLoader
 
                 // Temporary fix for making fixtures work with MySQL versions >= 5.5
                 if ($connection->getDriver() instanceof MySqlDriver) {
-                    $connection->exec('SET foreign_key_checks=0');
+                    // Get original value to ba able to reset to original state
+                    $config = $connection
+                        ->executeQuery("SHOW VARIABLES LIKE 'foreign_key_checks'")
+                        ->fetchAll(\PDO::FETCH_KEY_PAIR)
+                    ;
+
+                    // We assume ON if the setting can't somehow be retrieved,
+                    // this should only happen when db connection breaks, so we go safe way here
+                    $configValue = (isset($config['foreign_key_checks'])) ? $config['foreign_key_checks'] : 'ON';
+
+                    if (in_array($configValue, array('ON', '1'), true)) {
+                        $connection->exec('SET foreign_key_checks=OFF');
+                    }
                 }
 
                 $executor->purge();
 
-                // Resetting the FK checks
-                if ($connection->getDriver() instanceof MySqlDriver) {
-                    $connection->exec('SET foreign_key_checks=1');
+                // Resetting the FK checks to original state
+                if ($connection->getDriver() instanceof MySqlDriver && isset($configValue)) {
+                    $connection->exec(sprintf('SET foreign_key_checks=%s', $configValue));
                 }
+
                 break;
         }
     }
