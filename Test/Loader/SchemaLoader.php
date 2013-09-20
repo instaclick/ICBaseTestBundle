@@ -9,6 +9,7 @@ use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as SqliteDriver;
+use Doctrine\DBAL\Driver\PDOMySql\Driver as MySqlDriver;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -76,6 +77,8 @@ class SchemaLoader
      * Load the Database Schema.
      *
      * @param integer $purgeMode
+     *
+     * @TODO: Remove the FK checks when Doctrine comes up with a solution for truncating tables with FK constraints
      */
     public function load($purgeMode = ORMPurger::PURGE_MODE_TRUNCATE)
     {
@@ -92,7 +95,30 @@ class SchemaLoader
                 $executor = new ORMExecutor($this->entityManager, $purger);
                 $executor->setReferenceRepository(new ReferenceRepository($this->entityManager));
 
+                // Temporary fix for making fixtures work with MySQL versions >= 5.5
+                if ($connection->getDriver() instanceof MySqlDriver) {
+                    // Get original value to ba able to reset to original state
+                    $config = $connection
+                        ->executeQuery("SHOW VARIABLES LIKE 'foreign_key_checks'")
+                        ->fetchAll(\PDO::FETCH_KEY_PAIR)
+                    ;
+
+                    // We assume ON if the setting can't somehow be retrieved,
+                    // this should only happen when db connection breaks, so we go safe way here
+                    $configValue = (isset($config['foreign_key_checks'])) ? $config['foreign_key_checks'] : 'ON';
+
+                    if (in_array($configValue, array('ON', '1'), true)) {
+                        $connection->exec('SET foreign_key_checks=OFF');
+                    }
+                }
+
                 $executor->purge();
+
+                // Resetting the FK checks to original state
+                if ($connection->getDriver() instanceof MySqlDriver && isset($configValue)) {
+                    $connection->exec(sprintf('SET foreign_key_checks=%s', $configValue));
+                }
+
                 break;
         }
     }
