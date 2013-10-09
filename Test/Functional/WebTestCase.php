@@ -27,6 +27,8 @@ abstract class WebTestCase extends BaseWebTestCase
 
     const FIXTURES_PURGE_MODE = ORMPurger::PURGE_MODE_DELETE;
 
+    const AUTOLOAD_FIXTURES = true;
+
     /**
      * @var boolean
      */
@@ -52,23 +54,17 @@ abstract class WebTestCase extends BaseWebTestCase
         // Initialize the client; it is used in all loaders and helpers
         $this->client = static::initializeClient();
 
-        // Only initialize schema and fixtures if any are defined
+        if (!static::AUTOLOAD_FIXTURES) {
+            return null;
+        }
+
         $fixtureList = static::getFixtureList();
 
         if (empty($fixtureList) && ! $this->forceSchemaLoad) {
             return;
         }
 
-        $fixtureLoader = new Loader\FixtureLoader($this->client, static::FIXTURES_PURGE_MODE);
-        $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
-
-        $this->referenceRepository = $executor->getReferenceRepository();
-
-        $cacheDriver = $this->referenceRepository->getManager()->getMetadataFactory()->getCacheDriver();
-
-        if ($cacheDriver) {
-            $cacheDriver->deleteAll();
-        }
+        $this->loadFixtures($fixtureList);
     }
 
     /**
@@ -136,6 +132,50 @@ abstract class WebTestCase extends BaseWebTestCase
             ->getMockBuilder($class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    /**
+     * @param string|array $fixtureList
+     * @param bool         $mergeWithDefault
+     *
+     * @throws \InvalidArgumentException
+     */
+    final public function loadFixtures($fixtureList, $mergeWithDefault = false)
+    {
+        if (!is_string($fixtureList) && !is_array($fixtureList)) {
+            $type = gettype($fixtureList);
+
+            throw new \InvalidArgumentException(
+                sprintf('Argument "$fixtureList" must be either a string or an array. Type "%s" given.', $type)
+            );
+        }
+
+        if (!is_array($fixtureList)) {
+            $fixtureList = array($fixtureList);
+        }
+
+        if (true === $mergeWithDefault) {
+            $fixtureList = array_merge(
+                $fixtureList,
+                static::getFixtureList()
+            );
+        }
+
+        $fixtureLoader = new Loader\FixtureLoader($this->client, static::FIXTURES_PURGE_MODE);
+        $executor      = $fixtureLoader->load(static::MANAGER_NAME, $fixtureList);
+
+        $this->referenceRepository = $executor->getReferenceRepository();
+
+        $cacheDriver = $this
+            ->referenceRepository
+            ->getManager()
+            ->getMetadataFactory()
+            ->getCacheDriver()
+        ;
+
+        if ($cacheDriver) {
+            $cacheDriver->deleteAll();
+        }
     }
 
     /**
