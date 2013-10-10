@@ -5,7 +5,6 @@
 
 namespace IC\Bundle\Base\TestBundle\Test\Functional;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use IC\Bundle\Base\TestBundle\Test\Loader;
