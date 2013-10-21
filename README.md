@@ -344,6 +344,18 @@ protected static function getServerParameters()
 }
 ```
 
+Note: this assumes you have enabled `http_basic` in your security configuration using this setting in the `config_test.yml` file:
+
+```yaml
+# app/config/config_test.yml
+security:
+    firewalls:
+        your_firewall_name:
+            http_basic:
+```
+
+See [How to simulate HTTP Authentication in a Functional Test](http://symfony.com/doc/current/cookbook/testing/http_authentication.html) for details 
+
 ### Changing Client initialization
 
 Oftentimes, overriding `createClient` is enough. Whenever you need more
