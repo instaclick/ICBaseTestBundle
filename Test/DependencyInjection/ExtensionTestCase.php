@@ -14,6 +14,7 @@ use IC\Bundle\Base\TestBundle\Test\ContainerAwareTestCase;
  *
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Ryan Albon <ryanalbon@gmail.com>
+ * @author John Cartwright <jcartdev@gmail.com>
  */
 abstract class ExtensionTestCase extends ContainerAwareTestCase
 {
@@ -61,24 +62,24 @@ abstract class ExtensionTestCase extends ContainerAwareTestCase
      */
     public function assertHasDefinition($id)
     {
-        $actual = $this->container->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id);
+        $actual = $this->container->hasDefinition($id) ?: $this->container->hasAlias($id);
 
-        $this->assertTrue($actual);
+        $this->assertTrue($actual, sprintf('Expected definition "%s" to exist', $id));
     }
 
     /**
      * Assertion on the Constructor Arguments of a DIC Service Definition.
      *
      * @param \Symfony\Component\DependencyInjection\Definition $definition
-     * @param array                                             $arguments
+     * @param array                                             $argumentList
      */
-    public function assertDICConstructorArguments(Definition $definition, array $arguments)
+    public function assertDICConstructorArguments(Definition $definition, array $argumentList)
     {
         $this->assertEquals(
-            $arguments,
+            $argumentList,
             $definition->getArguments(),
             sprintf(
-                'Expected and actual DIC Service constructor arguments of definition "%s" do not match.',
+                'Expected and actual DIC Service constructor argumentList of definition "%s" do not match.',
                 $definition->getClass()
             )
         );
@@ -100,18 +101,53 @@ abstract class ExtensionTestCase extends ContainerAwareTestCase
     }
 
     /**
+     * Assertion on the called Method of a DIC Service Definition.
+     *
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param string                                            $methodName
+     * @param array                                             $parameterList
+     */
+    public function assertDICDefinitionMethodCall(Definition $definition, $methodName, array $parameterList = null)
+    {
+        $callList    = $definition->getMethodCalls();
+        $matchedCall = null;
+
+        foreach ($callList as $call) {
+            if ($call[0] === $methodName) {
+                $matchedCall = $call;
+
+                break;
+            }
+        }
+
+        if ( ! $matchedCall) {
+            $this->fail(
+                sprintf('Method "%s" is was expected to be called.', $methodName)
+            );
+        }
+
+        if ($parameterList !== null) {
+            $this->assertEquals(
+                $parameterList,
+                $matchedCall[1],
+                sprintf('Expected parameters to method "%s" do not match the actual parameters.', $methodName)
+            );
+        }
+    }
+
+    /**
      * Assertion on the called Method position of a DIC Service Definition.
      *
      * @param integer                                           $position
      * @param \Symfony\Component\DependencyInjection\Definition $definition
      * @param string                                            $methodName
-     * @param array                                             $params
+     * @param array                                             $parameterList
      */
-    public function assertDICDefinitionMethodCallAt($position, Definition $definition, $methodName, array $params = null)
+    public function assertDICDefinitionMethodCallAt($position, Definition $definition, $methodName, array $parameterList = null)
     {
-        $calls = $definition->getMethodCalls();
+        $callList = $definition->getMethodCalls();
 
-        if ( ! isset($calls[$position][0])) {
+        if ( ! isset($callList[$position][0])) {
             // Throws an Exception
             $this->fail(
                 sprintf('Method "%s" is expected to be called at position %s.', $methodName, $position)
@@ -120,16 +156,35 @@ abstract class ExtensionTestCase extends ContainerAwareTestCase
 
         $this->assertEquals(
             $methodName,
-            $calls[$position][0],
+            $callList[$position][0],
             sprintf('Method "%s" is expected to be called at position %s.', $methodName, $position)
         );
 
-        if ($params !== null) {
+        if ($parameterList !== null) {
             $this->assertEquals(
-                $params,
-                $calls[$position][1],
+                $parameterList,
+                $callList[$position][1],
                 sprintf('Expected parameters to methods "%s" do not match the actual parameters.', $methodName)
             );
+        }
+    }
+
+    /**
+     * Assertion on the Definition that a method is not called for a DIC Service Definition.
+     *
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param string                                            $methodName
+     */
+    public function assertDICDefinitionMethodNotCalled(Definition $definition, $methodName)
+    {
+        $callList = $definition->getMethodCalls();
+
+        foreach ($callList as $call) {
+            if ($call[0] === $methodName) {
+                $this->fail(
+                    sprintf('Method "%s" is not expected to be called.', $methodName)
+                );
+            }
         }
     }
 }
