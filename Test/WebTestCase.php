@@ -78,4 +78,15 @@ abstract class WebTestCase extends BaseWebTestCase
         return new $helperClass($this);
     }
 
+    /**
+     * Add helper to helper list.
+     * 
+     * @param string $name
+     * @param string $namespace
+     */
+    public function addHelper($name, $namespace)
+    {
+        $this->helperList->set($name, $namespace);
+    }
+
 }
