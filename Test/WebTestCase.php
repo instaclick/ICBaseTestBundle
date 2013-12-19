@@ -80,7 +80,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
     /**
      * Add helper to helper list.
-     * 
+     *
      * @param string $name
      * @param string $namespace
      */
@@ -88,5 +88,4 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         $this->helperList->set($name, $namespace);
     }
-
 }

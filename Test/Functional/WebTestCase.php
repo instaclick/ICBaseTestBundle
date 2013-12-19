@@ -6,8 +6,8 @@
 namespace IC\Bundle\Base\TestBundle\Test\Functional;
 
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use IC\Bundle\Base\TestBundle\Test\Loader;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 
 /**
  * Abstract class for Web test cases
@@ -180,5 +180,51 @@ abstract class WebTestCase extends BaseWebTestCase
     protected static function getFixtureList()
     {
         return array();
+    }
+
+    /**
+     * Assert response status code is 200.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    protected function assertResponseStatusOk($response)
+    {
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * Alias for assertResponseStatusFound.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string|null $location
+     */
+    protected function assertResponseStatusRedirect($response, $location = null)
+    {
+        $this->assertResponseStatusFound($response, $location);
+    }
+
+    /**
+     * Assert response status code is 302 and if response location is the expected.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string|null                                $expectedLocation
+     */
+    protected function assertResponseStatusFound($response, $expectedLocation = null)
+    {
+        $this->assertEquals(302, $response->getStatusCode());
+
+        if ($expectedLocation !== null) {
+            $this->assertEquals($expectedLocation, $response->headers->get('location'));
+        }
+    }
+
+    /**
+     * Assert response status code is 404.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    protected function assertResponseStatusNotFound($response)
+    {
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }
