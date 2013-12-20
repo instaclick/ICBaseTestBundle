@@ -6,8 +6,8 @@
 namespace IC\Bundle\Base\TestBundle\Test\Functional;
 
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use IC\Bundle\Base\TestBundle\Test\Loader;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 
 /**
  * Abstract class for Web test cases
@@ -180,5 +180,85 @@ abstract class WebTestCase extends BaseWebTestCase
     protected static function getFixtureList()
     {
         return array();
+    }
+
+    /**
+     * Assert HTTP response status code is 200 OK.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string                                     $message
+     */
+    protected function assertResponseStatusOk($response, $message = '')
+    {
+        $this->assertResponseStatusCode(200, $response, $message);
+    }
+
+    /**
+     * Assert HTTP response status code is Redirection 3xx.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string                                     $message
+     */
+    protected function assertResponseStatusRedirection($response, $message = '')
+    {
+        $this->assertGreaterThanOrEqual(300, $response->getStatusCode(), $message);
+        $this->assertLessThanOrEqual(399, $response->getStatusCode(), $message);
+    }
+
+    /**
+     * Assert HTTP response status code is 301 Moved.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string                                     $message
+     */
+    protected function assertResponseStatusMoved($response, $message = '')
+    {
+        $this->assertResponseStatusCode(301, $response, $message);
+    }
+
+    /**
+     * Assert HTTP response status code is 302 Found.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string                                     $message
+     */
+    protected function assertResponseStatusFound($response, $message = '')
+    {
+        $this->assertResponseStatusCode(302, $response, $message);
+    }
+
+    /**
+     * Assert HTTP response status code is 404 Not Found.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string                                     $message
+     */
+    protected function assertResponseStatusNotFound($response, $message = '')
+    {
+        $this->assertResponseStatusCode(404, $response, $message);
+    }
+
+    /**
+     * Assert HTTP response status code matches the expected.
+     *
+     * @param integer                                    $expectedStatusCode
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param string                                     $message
+     */
+    protected function assertResponseStatusCode($expectedStatusCode, $response, $message = '')
+    {
+        $this->assertEquals($expectedStatusCode, $response->getStatusCode(), $message);
+    }
+
+    /**
+     * Assert HTTP response header location matches the expected.
+     *
+     * @param string|null                                $expectedLocation
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param  string $message
+     */
+    protected function assertResponseRedirectionLocation($expectedLocation, $response, $message = '')
+    {
+        $this->assertEquals($expectedLocation, $response->headers->get('location'), $message);
     }
 }

@@ -89,7 +89,7 @@ class SessionHelper extends AbstractHelper
 
         $this->session->set('_security_' . $firewall, serialize($token));
         $this->session->save();
-        
+
         $this->client->getCookieJar()->set(new Cookie($this->session->getName(), $this->session->getId()));
     }
 
