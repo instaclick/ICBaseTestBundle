@@ -157,9 +157,19 @@ abstract class WebTestCase extends BaseWebTestCase
     protected static function initializeClient()
     {
         return static::createClient(
-            array('environment' => static::ENVIRONMENT),
+            static::getClientOptions(),
             static::getServerParameters()
         );
+    }
+
+    /**
+     * Overwritable method for client's options
+     *
+     * @return array
+     */
+    protected static function getClientOptions()
+    {
+        return array('environment' => static::ENVIRONMENT);
     }
 
     /**
