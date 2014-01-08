@@ -75,7 +75,18 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         $helperClass = $this->helperList->get($name);
 
-        return new $helperClass($this);
+        if ($helperClass) {
+            return new $helperClass($this);
+        }
+
+        $container     = $this->getClient()->getContainer();
+        $helperService = $container->get($name);
+
+        if ($helperService) {
+            $helperService->setTestCase($this);
+
+            return $helperService;
+        }
     }
 
     /**
