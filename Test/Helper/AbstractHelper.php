@@ -24,7 +24,12 @@ abstract class AbstractHelper
      *
      * @param \IC\Bundle\Base\TestBundle\Test\Functional\WebTestCase $testCase
      */
-    public function __construct(WebTestCase $testCase)
+    public function __construct(WebTestCase $testCase = null)
+    {
+        $this->testCase = $testCase;
+    }
+
+    public function setTestCase(WebTestCase $testCase)
     {
         $this->testCase = $testCase;
     }
