@@ -1,0 +1,24 @@
+{
+    "name": "instaclick/base-test-bundle",
+    "description": "This bundle provides lower level support for functional tests on Symfony2.",
+    "keywords": ["symfony2"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "InstaClick Inc.",
+            "homepage": "http://www.instaclick.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.0,<3.0-dev",
+        "doctrine/doctrine-fixtures-bundle": "2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "IC\\Bundle\\Base\\TestBundle": ""
+        }
+    },
+    "target-dir" : "IC/Bundle/Base/TestBundle"
+}
