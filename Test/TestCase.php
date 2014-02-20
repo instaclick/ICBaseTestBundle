@@ -84,6 +84,11 @@ abstract class TestCase extends BaseTestCase
         return $helper;
     }
 
+    public function addHelper($namespace, $class)
+    {
+        $this->helperList->set($namespace, $class);
+    }
+
     /**
      * Create a mock object of a given class name.
      *
