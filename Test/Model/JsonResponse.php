@@ -57,7 +57,7 @@ class JsonResponse
     /**
      * Retrieve decoded JSON response into StdClass object.
      *
-     * @return StdClass
+     * @return \StdClass
      */
     public function getResponseObject()
     {

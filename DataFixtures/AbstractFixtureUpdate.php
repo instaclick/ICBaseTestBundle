@@ -18,7 +18,7 @@ abstract class AbstractFixtureUpdate extends AbstractFixture
     /**
      * Updates and persists the entities provided from the data list
      *
-     * @param Doctrine\Common\Persistence\ObjectManager $manager
+     * @param \Doctrine\Common\Persistence\ObjectManager $manager
      * 
      * @throws \InvalidArgumentException If invalid reference key to update was provided
      */
