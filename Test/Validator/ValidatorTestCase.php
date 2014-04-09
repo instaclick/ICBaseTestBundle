@@ -30,6 +30,9 @@ abstract class ValidatorTestCase extends TestCase
             ? 'addViolationAt'
             : 'addViolationAtSubPath';
 
+        $this->assertContains($constraint->getTargets(), array(Constraint::PROPERTY_CONSTRAINT, Constraint::CLASS_CONSTRAINT));
+        $this->assertNotEmpty($constraint->validatedBy());
+
         $context
              ->expects($this->never())
              ->method('addViolation');
