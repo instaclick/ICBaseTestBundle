@@ -18,9 +18,9 @@ class RouteHelper extends AbstractHelper
      * Retrieve a generated route from a route id.
      * If the route is not registered then the test is skipped.
      *
-     * @param string $id            Route id
-     * @param array  $parameterList Route parameters
-     * @param bool   $absolute      Route absolution
+     * @param string  $id            Route id
+     * @param array   $parameterList Route parameters
+     * @param boolean $absolute      Route absolution
      *
      * @return mixed
      */

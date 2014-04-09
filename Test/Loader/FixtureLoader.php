@@ -37,7 +37,7 @@ class FixtureLoader
 
     /**
      * @param \Symfony\Bundle\FrameworkBundle\Client $client
-     * @param int                                    $purgeMode
+     * @param integer                                $purgeMode
      */
     public function __construct(Client $client, $purgeMode = ORMPurger::PURGE_MODE_DELETE)
     {
