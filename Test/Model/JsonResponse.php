@@ -25,7 +25,7 @@ class JsonResponse
     /**
      * Decoded JSON response into StdClass object.
      *
-     * @var StdClass|null
+     * @var \StdClass|null
      */
     private $responseObject = null;
 
