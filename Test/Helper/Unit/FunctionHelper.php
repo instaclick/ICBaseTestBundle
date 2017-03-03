@@ -12,7 +12,7 @@ namespace IC\Bundle\Base\TestBundle\Test\Helper\Unit;
  */
 class FunctionHelper extends UnitHelper
 {
-    static private $functions;
+    public static $functions;
 
     /**
      * Mock a function
@@ -51,10 +51,14 @@ namespace $namespace;
 
 function $methodName()
 {
-    return call_user_func_array(
-        array('IC\Bundle\Base\TestBundle\Test\Helper\Unit\FunctionHelper', 'invoke'),
-        array('$methodName', func_get_args())
-    );
+    if (\IC\Bundle\Base\TestBundle\Test\Helper\Unit\FunctionHelper::hasMock('$methodName')) {
+        return call_user_func_array(
+            array('IC\Bundle\Base\TestBundle\Test\Helper\Unit\FunctionHelper', 'invoke'),
+            array('$methodName', func_get_args())
+        );
+    }
+
+    call_user_func_array('$methodName', func_get_args());
 }
 END_OF_MOCK
             );
@@ -101,6 +105,18 @@ END_OF_MOCK
             : $methodName;
 
         return call_user_func_array($callable, $args);
+    }
+
+    /**
+     * Has mock?
+     *
+     * @param string $methodName
+     *
+     * @return boolean
+     */
+    public static function hasMock($methodName)
+    {
+        return array_key_exists($methodName, self::$functions);
     }
 
     /**
